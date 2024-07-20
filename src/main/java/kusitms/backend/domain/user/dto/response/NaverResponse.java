@@ -6,7 +6,7 @@ public class NaverResponse implements OAuth2Response{
 
 //    네이버는 아래와 같이 이중 방식 객체
 //    {
-//        resultcode=00, message=success, response={id=123123123, name=개발자유미}
+//        resultcode=00, message=success, response={id=123123123, name=~~~}
 //    }
 
     private final Map<String, Object> attribute;

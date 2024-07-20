@@ -52,7 +52,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 //            로그인 하는 부분 (추후 수정 예정)
             UserDTO userDTO = new UserDTO();
             userDTO.setUsername(username);
-            userDTO.setName(oAuth2Response.getName());
+//            userDTO.setName(oAuth2Response.getName());
             userDTO.setRole("ROLE_USER");
 
             return new CustomOAuth2User(userDTO);

@@ -6,7 +6,7 @@ public class GoogleResponse implements OAuth2Response{
 
     // 구글 반환 객체
 //    {
-//        resultcode=00, message=success, id=123123123, name=개발자유미
+//        resultcode=00, message=success, id=123123123, name=~~~~
 //    }
 
     private final Map<String, Object> attribute;
