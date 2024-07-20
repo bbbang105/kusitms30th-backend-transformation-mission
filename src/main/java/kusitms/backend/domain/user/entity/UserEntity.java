@@ -9,7 +9,7 @@ import lombok.Setter;
 
 
 //추후 수정 예정 (필드)
-@Entity
+@Entity(name="users")
 @Getter
 @Setter
 public class UserEntity {
