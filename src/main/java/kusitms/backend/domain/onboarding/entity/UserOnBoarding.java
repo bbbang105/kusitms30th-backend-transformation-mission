@@ -1,9 +1,7 @@
 package kusitms.backend.domain.onboarding.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import kusitms.backend.domain.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -16,7 +14,9 @@ public class UserOnBoarding {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     private String nickname;
 
@@ -25,8 +25,8 @@ public class UserOnBoarding {
     private String job;
 
     @Builder
-    public UserOnBoarding(Long userId, String nickname, int age, String job) {
-        this.userId = userId;
+    public UserOnBoarding(User user, String nickname, int age, String job) {
+        this.user = user;
         this.nickname = nickname;
         this.age = age;
         this.job = job;
