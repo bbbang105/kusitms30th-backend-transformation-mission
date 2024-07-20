@@ -28,4 +28,8 @@ public class User {
         this.provider = provider;
         this.providerId = providerId;
     }
+
+    public void modifyUserName(String name){
+        this.name=name;
+    }
 }

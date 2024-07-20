@@ -51,8 +51,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             return new CustomOAuth2User(userDTO);
         }
         else{
-            existData.setName(oAuth2Response.getName());
-            userRepository.save(existData);
+            existData.modifyUserName(oAuth2Response.getName());
 
             UserDTO userDTO = UserDTO.builder()
                     .name(oAuth2Response.getName())
@@ -61,12 +60,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .build();
             return new CustomOAuth2User(userDTO);
         }
-
-
-
-
-
-
 
     }
 }
