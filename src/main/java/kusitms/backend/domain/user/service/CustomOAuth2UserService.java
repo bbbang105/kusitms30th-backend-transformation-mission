@@ -33,40 +33,35 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
         }
         else {
-
             return null;
         }
 
         //리소스 서버에서 받은 유저 정보로 사용자를 특정할 providerId (플랫폼 제공 고유 ID)가 있어야 함
-        String username = oAuth2Response.getProvider()+" "+oAuth2Response.getProviderId();
-        UserEntity existData = userRepository.findByUsername(username);
+        UserEntity existData = userRepository.findByProviderAndProviderId(oAuth2Response.getProvider(),oAuth2Response.getProviderId());
         if (existData == null) {
             UserEntity userEntity = new UserEntity();
-            userEntity.setUsername(username);
             userEntity.setName(oAuth2Response.getName());
-            userEntity.setEmail(oAuth2Response.getEmail());
-            userEntity.setRole("ROLE_USER");
+            userEntity.setProvider(oAuth2Response.getProvider());
+            userEntity.setProviderId(oAuth2Response.getProviderId());
 
             userRepository.save(userEntity);
 
 //            로그인 하는 부분 (추후 수정 예정)
             UserDTO userDTO = new UserDTO();
-            userDTO.setUsername(username);
-//            userDTO.setName(oAuth2Response.getName());
-            userDTO.setRole("ROLE_USER");
+            userDTO.setName(oAuth2Response.getName());
+            userDTO.setProvider(oAuth2Response.getProvider());
+            userDTO.setProviderId(oAuth2Response.getProviderId());
 
             return new CustomOAuth2User(userDTO);
         }
         else{
-            existData.setEmail(oAuth2Response.getEmail());
             existData.setName(oAuth2Response.getName());
-
             userRepository.save(existData);
 
             UserDTO userDTO = new UserDTO();
-            userDTO.setUsername(existData.getUsername());
             userDTO.setName(oAuth2Response.getName());
-            userDTO.setRole(existData.getRole());
+            userDTO.setProvider(oAuth2Response.getProvider());
+            userDTO.setProviderId(oAuth2Response.getProviderId());
 
             return new CustomOAuth2User(userDTO);
         }

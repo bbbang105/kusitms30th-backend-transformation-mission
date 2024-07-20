@@ -19,14 +19,19 @@ public class JWTUtil {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
 
-    public String getUsername(String token) {
+    public String getName(String token) {
 
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username", String.class);
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("name", String.class);
     }
 
-    public String getRole(String token) {
+    public String getProvider(String token) {
 
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("provider", String.class);
+    }
+
+    public String getProviderId(String token) {
+
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("providerId", String.class);
     }
 
     public Boolean isExpired(String token) {
@@ -34,11 +39,12 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-    public String createJwt(String username, String role, Long expiredMs) {
+    public String createJwt(String name, String provider, String providerId, Long expiredMs) {
 
         return Jwts.builder()
-                .claim("username", username)
-                .claim("role", role)
+                .claim("name", name)
+                .claim("provider", provider)
+                .claim("providerId", providerId)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(secretKey)

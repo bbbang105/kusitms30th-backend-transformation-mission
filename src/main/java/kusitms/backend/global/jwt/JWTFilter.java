@@ -73,14 +73,16 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        //토큰에서 username과 role 획득
-        String username = jwtUtil.getUsername(token);
-        String role = jwtUtil.getRole(token);
+        //토큰에서 name과 provider, providerId 획득
+        String name = jwtUtil.getName(token);
+        String provider = jwtUtil.getProvider(token);
+        String providerId = jwtUtil.getProviderId(token);
 
         //userDTO를 생성하여 값 set
         UserDTO userDTO = new UserDTO();
-        userDTO.setUsername(username);
-        userDTO.setRole(role);
+        userDTO.setName(name);
+        userDTO.setProvider(provider);
+        userDTO.setProviderId(providerId);
 
         //UserDetails에 회원 정보 객체 담기
         CustomOAuth2User customOAuth2User = new CustomOAuth2User(userDTO);

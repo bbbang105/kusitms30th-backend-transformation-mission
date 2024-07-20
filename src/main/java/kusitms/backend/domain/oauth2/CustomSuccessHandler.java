@@ -29,14 +29,17 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         //OAuth2User
         CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
 
-        String username = customUserDetails.getUsername();
+
+        String name = customUserDetails.getName();
+        String provider = customUserDetails.getProvider();
+        String providerId = customUserDetails.getProviderId();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
-        String token = jwtUtil.createJwt(username, role, 60*60*60L);
+        String token = jwtUtil.createJwt(name,provider,providerId, 60*60*60L);
 
         response.addCookie(createCookie("Authorization", token));
         response.sendRedirect("http://localhost:5173");
