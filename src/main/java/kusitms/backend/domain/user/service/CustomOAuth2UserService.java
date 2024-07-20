@@ -1,9 +1,6 @@
 package kusitms.backend.domain.user.service;
 
-import kusitms.backend.domain.user.dto.response.GoogleResponse;
-import kusitms.backend.domain.user.dto.response.NaverResponse;
-import kusitms.backend.domain.user.dto.response.OAuth2Response;
-import kusitms.backend.domain.user.dto.response.UserDTO;
+import kusitms.backend.domain.user.dto.response.*;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
