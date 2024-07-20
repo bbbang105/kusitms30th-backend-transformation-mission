@@ -1,7 +1,7 @@
 package kusitms.backend.domain.user.service;
 
 import kusitms.backend.domain.user.dto.response.*;
-import kusitms.backend.domain.user.entity.UserEntity;
+import kusitms.backend.domain.user.entity.User;
 import kusitms.backend.domain.user.repository.UserRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -37,14 +37,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         //리소스 서버에서 받은 유저 정보로 사용자를 특정할 providerId (플랫폼 제공 고유 ID)가 있어야 함
-        UserEntity existData = userRepository.findByProviderAndProviderId(oAuth2Response.getProvider(),oAuth2Response.getProviderId());
+        User existData = userRepository.findByProviderAndProviderId(oAuth2Response.getProvider(),oAuth2Response.getProviderId());
         if (existData == null) {
-            UserEntity userEntity = new UserEntity();
-            userEntity.setName(oAuth2Response.getName());
-            userEntity.setProvider(oAuth2Response.getProvider());
-            userEntity.setProviderId(oAuth2Response.getProviderId());
+            User user = new User();
+            user.setName(oAuth2Response.getName());
+            user.setProvider(oAuth2Response.getProvider());
+            user.setProviderId(oAuth2Response.getProviderId());
 
-            userRepository.save(userEntity);
+            userRepository.save(user);
 
 //            로그인 하는 부분 (추후 수정 예정)
             UserDTO userDTO = new UserDTO();

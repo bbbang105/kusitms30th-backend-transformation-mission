@@ -4,15 +4,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
 //추후 수정 예정 (필드)
 @Entity(name="users")
-@Getter
-@Setter
-public class UserEntity {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class User {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -24,4 +22,10 @@ public class UserEntity {
 
     private String providerId;
 
+    @Builder
+    public User(String name, String provider, String providerId) {
+        this.name = name;
+        this.provider = provider;
+        this.providerId = providerId;
+    }
 }
