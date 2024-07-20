@@ -43,23 +43,22 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .build();
             userRepository.save(user);
 
-//            로그인 하는 부분 (추후 수정 예정)
-            UserDTO userDTO = new UserDTO();
-            userDTO.setName(oAuth2Response.getName());
-            userDTO.setProvider(oAuth2Response.getProvider());
-            userDTO.setProviderId(oAuth2Response.getProviderId());
-
+            UserDTO userDTO = UserDTO.builder()
+                    .name(oAuth2Response.getName())
+                    .provider(oAuth2Response.getProvider())
+                    .providerId(oAuth2Response.getProviderId())
+                    .build();
             return new CustomOAuth2User(userDTO);
         }
         else{
             existData.setName(oAuth2Response.getName());
             userRepository.save(existData);
 
-            UserDTO userDTO = new UserDTO();
-            userDTO.setName(oAuth2Response.getName());
-            userDTO.setProvider(oAuth2Response.getProvider());
-            userDTO.setProviderId(oAuth2Response.getProviderId());
-
+            UserDTO userDTO = UserDTO.builder()
+                    .name(oAuth2Response.getName())
+                    .provider(oAuth2Response.getProvider())
+                    .providerId(oAuth2Response.getProviderId())
+                    .build();
             return new CustomOAuth2User(userDTO);
         }
 
