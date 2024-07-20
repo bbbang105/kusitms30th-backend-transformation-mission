@@ -1,34 +1,32 @@
-package kusitms.backend.domain.oauth2;
+package kusitms.backend.domain.auth.service;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import kusitms.backend.domain.user.dto.response.CustomOAuth2User;
-import kusitms.backend.global.jwt.JWTUtil;
+import kusitms.backend.domain.auth.dto.response.CustomOAuth2User;
+import kusitms.backend.domain.auth.jwt.JWTUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
-@Component
+@Service
+@RequiredArgsConstructor
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    private final JWTUtil jwtUtil;
 
-    public CustomSuccessHandler(JWTUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
+    private final JWTUtil jwtUtil;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
         //OAuth2User
         CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
-
 
         String name = customUserDetails.getName();
         String provider = customUserDetails.getProvider();

@@ -1,4 +1,4 @@
-package kusitms.backend.global.jwt;
+package kusitms.backend.domain.auth.jwt;
 
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;

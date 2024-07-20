@@ -1,4 +1,4 @@
-package kusitms.backend.domain.user.dto.response;
+package kusitms.backend.domain.auth.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

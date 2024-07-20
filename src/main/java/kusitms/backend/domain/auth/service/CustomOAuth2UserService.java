@@ -1,9 +1,8 @@
-package kusitms.backend.domain.user.service;
+package kusitms.backend.domain.auth.service;
 
-import kusitms.backend.domain.user.dto.response.*;
+import kusitms.backend.domain.auth.dto.response.*;
 import kusitms.backend.domain.user.entity.User;
 import kusitms.backend.domain.user.repository.UserRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

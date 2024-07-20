@@ -1,4 +1,4 @@
-package kusitms.backend.domain.user.dto.response;
+package kusitms.backend.domain.auth.dto.response;
 
 public interface OAuth2Response {
     //제공자 (Ex. naver, google, ...)

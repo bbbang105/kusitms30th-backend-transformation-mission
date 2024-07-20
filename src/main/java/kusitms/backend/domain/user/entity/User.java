@@ -6,8 +6,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
-
-//추후 수정 예정 (필드)
 @Entity(name="users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
