@@ -2,6 +2,7 @@ package kusitms.backend.global.config;
 
 import kusitms.backend.domain.oauth2.CustomSuccessHandler;
 import kusitms.backend.domain.user.service.CustomOAuth2UserService;
+import kusitms.backend.global.jwt.JWTFilter;
 import kusitms.backend.global.jwt.JWTUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -39,7 +41,9 @@ public class SecurityConfig {
         //HTTP Basic 인증 방식 disable
         http
                 .httpBasic((auth) -> auth.disable());
-
+        //JWTFilter 추가
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
         //oauth2
         http
                 .oauth2Login((oauth2)-> oauth2
