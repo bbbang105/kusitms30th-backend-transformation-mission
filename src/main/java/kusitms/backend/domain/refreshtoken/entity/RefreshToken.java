@@ -1,4 +1,4 @@
-package kusitms.backend.domain.auth.entity;
+package kusitms.backend.domain.refreshtoken.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
