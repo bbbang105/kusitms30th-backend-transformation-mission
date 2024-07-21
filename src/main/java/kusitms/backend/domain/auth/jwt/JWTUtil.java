@@ -41,7 +41,7 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-    public String createAccessToken(Long userId, String name, String provider, String providerId, Long expiredMs) {
+    public String createAccessToken(Long userId, String name, String provider, String providerId) {
 
         return Jwts.builder()
                 .claim("userId", userId)
@@ -49,12 +49,12 @@ public class JWTUtil {
                 .claim("provider", provider)
                 .claim("providerId", providerId)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiredMs))
+                .expiration(new Date(System.currentTimeMillis() + 3600000)) //1시간 밀리초로 변환
                 .signWith(secretKey)
                 .compact();
     }
 
-    public String createRefreshToken(Long userId, String name, String provider, String providerId, Long expiredMs) {
+    public String createRefreshToken(Long userId, String name, String provider, String providerId) {
 
         return Jwts.builder()
                 .claim("userId", userId)
@@ -62,7 +62,7 @@ public class JWTUtil {
                 .claim("provider", provider)
                 .claim("providerId", providerId)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiredMs))
+                .expiration(new Date(System.currentTimeMillis() + 1209600000)) //14일 밀리초로 변환
                 .signWith(secretKey)
                 .compact();
     }
