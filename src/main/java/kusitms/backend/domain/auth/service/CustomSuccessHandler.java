@@ -30,7 +30,6 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
-        //OAuth2User
         CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
 
         Long userId = customUserDetails.getId();
@@ -38,25 +37,21 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String provider = customUserDetails.getProvider();
         String providerId = customUserDetails.getProviderId();
 
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
-        GrantedAuthority auth = iterator.next();
-        String role = auth.getAuthority();
-
-        String accessToken = jwtUtil.createAccessToken(userId,name,provider,providerId);
-        String refreshToken = jwtUtil.createRefreshToken(userId,name,provider,providerId);
-
-        response.addCookie(createCookie("Authorization", accessToken));
-        response.addCookie(createCookie("Refresh-Token", refreshToken));
-
-        // 리프레쉬 토큰 저장
-        refreshTokenService.saveOrUpdateToken(userId, refreshToken);
-
         UserOnBoarding onboarding = userOnboardingRepository.findByUserId(userId);
-//        클라이언트에 userId를 어떻게 넘겨줄 수 있을지? 온보딩 시
         if (onboarding == null) {
+            // 온보딩 페이지로 리디렉션, 쿠키에 토큰 저장하지 않음
             response.sendRedirect("http://localhost:5173/onboarding?userId=" + userId);
         } else {
+            // 기존 회원, 쿠키에 토큰 저장
+            String accessToken = jwtUtil.createAccessToken(userId, name, provider, providerId);
+            String refreshToken = jwtUtil.createRefreshToken(userId, name, provider, providerId);
+
+            response.addCookie(createCookie("Authorization", accessToken));
+            response.addCookie(createCookie("Refresh-Token", refreshToken));
+
+            // 리프레쉬 토큰 저장
+            refreshTokenService.saveOrUpdateToken(userId, refreshToken);
+
             response.sendRedirect("http://localhost:5173");
         }
     }

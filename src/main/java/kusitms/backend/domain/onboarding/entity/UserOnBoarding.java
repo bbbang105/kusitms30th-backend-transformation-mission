@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import kusitms.backend.domain.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity(name="user_on_boarding")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class UserOnBoarding {
 
     @Id
