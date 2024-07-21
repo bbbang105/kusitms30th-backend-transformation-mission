@@ -73,6 +73,8 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
+        Long userId = jwtUtil.getUserId(authorization);
+
         //userDTO를 생성하여 값 set
         UserDTO userDTO = UserDTO.builder()
                 .name(jwtUtil.getName(token))
@@ -81,7 +83,7 @@ public class JWTFilter extends OncePerRequestFilter {
                 .build();
 
         //UserDetails에 회원 정보 객체 담기
-        CustomOAuth2User customOAuth2User = new CustomOAuth2User(userDTO);
+        CustomOAuth2User customOAuth2User = new CustomOAuth2User(userDTO,userId);
 
         //스프링 시큐리티 인증 토큰 생성
         Authentication authToken = new UsernamePasswordAuthenticationToken(customOAuth2User, null, customOAuth2User.getAuthorities());

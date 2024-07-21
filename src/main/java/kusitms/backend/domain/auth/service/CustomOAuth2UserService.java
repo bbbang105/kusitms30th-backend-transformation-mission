@@ -8,9 +8,10 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
@@ -48,17 +49,18 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .provider(oAuth2Response.getProvider())
                     .providerId(oAuth2Response.getProviderId())
                     .build();
-            return new CustomOAuth2User(userDTO);
+            return new CustomOAuth2User(userDTO,user.getId());
         }
         else{
             existData.modifyUserName(oAuth2Response.getName());
+            userRepository.save(existData);
 
             UserDTO userDTO = UserDTO.builder()
                     .name(oAuth2Response.getName())
                     .provider(oAuth2Response.getProvider())
                     .providerId(oAuth2Response.getProviderId())
                     .build();
-            return new CustomOAuth2User(userDTO);
+            return new CustomOAuth2User(userDTO,existData.getId());
         }
 
     }

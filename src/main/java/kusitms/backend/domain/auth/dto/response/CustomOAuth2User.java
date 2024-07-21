@@ -10,9 +10,11 @@ import java.util.Map;
 public class CustomOAuth2User implements OAuth2User {
 
     private final UserDTO userDTO;
+    private Long userId;
 
-    public CustomOAuth2User(UserDTO userDTO) {
+    public CustomOAuth2User(UserDTO userDTO, Long userId) {
         this.userDTO = userDTO;
+        this.userId = userId;
     }
 
 //    받은 특성들, 획일화 어려워 따로 구현
@@ -33,6 +35,10 @@ public class CustomOAuth2User implements OAuth2User {
             }
         });
         return collection;
+    }
+
+    public Long getId(){
+        return userId;
     }
 
     @Override
