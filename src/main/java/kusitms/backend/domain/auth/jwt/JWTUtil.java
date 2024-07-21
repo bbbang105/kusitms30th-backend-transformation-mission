@@ -41,21 +41,6 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-    public Boolean isOnboardingToken(String token) {
-        String purpose = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("purpose", String.class);
-        return "onboarding".equals(purpose);
-    }
-
-    public String createOnboardingToken(Long userId) {
-        return Jwts.builder()
-                .claim("userId", userId)
-                .claim("purpose", "onboarding")
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 600000)) // 10분 유효
-                .signWith(secretKey)
-                .compact();
-    }
-
     public String createAccessToken(Long userId, String name, String provider, String providerId) {
 
         return Jwts.builder()
