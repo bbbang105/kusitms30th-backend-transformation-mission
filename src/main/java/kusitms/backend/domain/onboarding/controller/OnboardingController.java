@@ -2,7 +2,7 @@ package kusitms.backend.domain.onboarding.controller;
 
 import kusitms.backend.domain.onboarding.dto.request.ModifyUserInfoRequest;
 import kusitms.backend.domain.onboarding.dto.request.OnboardingRequest;
-import kusitms.backend.domain.onboarding.dto.response.UserInfoResponse;
+import kusitms.backend.domain.onboarding.dto.response.OnboardingInfoResponse;
 import kusitms.backend.domain.onboarding.service.OnboardingService;
 import kusitms.backend.global.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +23,10 @@ public class OnboardingController {
     }
 
     @GetMapping("/users/{userId}")
-    public UserInfoResponse getUserInfo(@PathVariable Long userId) {
-        UserInfoResponse userInfoResponse = onboardingService.getUserInfo(userId);
-        return userInfoResponse;
+    public ResponseEntity<ApiResponse<OnboardingInfoResponse>> getOnboardingInfo(@PathVariable Long userId) {
+        OnboardingInfoResponse onboardingInfoResponse = onboardingService.getOnboardingInfo(userId);
+        ApiResponse<OnboardingInfoResponse> response = new ApiResponse<>(HttpStatus.OK,"Get Onboarding Info Successfully",onboardingInfoResponse);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/users/{userId}")

@@ -3,7 +3,7 @@ package kusitms.backend.domain.onboarding.service;
 import kusitms.backend.domain.auth.jwt.JWTUtil;
 import kusitms.backend.domain.onboarding.dto.request.ModifyUserInfoRequest;
 import kusitms.backend.domain.onboarding.dto.request.OnboardingRequest;
-import kusitms.backend.domain.onboarding.dto.response.UserInfoResponse;
+import kusitms.backend.domain.onboarding.dto.response.OnboardingInfoResponse;
 import kusitms.backend.domain.onboarding.entity.Onboarding;
 import kusitms.backend.domain.onboarding.repository.OnboardingRepository;
 import kusitms.backend.domain.refreshtoken.service.RefreshTokenService;
@@ -54,16 +54,11 @@ public class OnboardingService {
     }
 
     @Transactional(readOnly = true)
-    public UserInfoResponse getUserInfo(Long userId) {
-        Onboarding onboarding = onboardingRepository.findByUserId(userId);
-        if (onboarding ==null) {
-            return null;
-        }
-        else{
-            UserInfoResponse userInfoResponse =new UserInfoResponse(onboarding.getNickname(), onboarding.getAge(), onboarding.getJob());
-            return userInfoResponse;
+    public OnboardingInfoResponse getOnboardingInfo(Long userId) {
+        Onboarding onboarding = onboardingRepository.findByUserId(userId)
+                .orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND,"Onboarding not found"));
 
-        }
+        return new OnboardingInfoResponse(onboarding.getNickname(), onboarding.getAge(), onboarding.getJob());
     }
 
     @Transactional

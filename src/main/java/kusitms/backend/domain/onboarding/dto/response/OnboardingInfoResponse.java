@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class UserInfoResponse {
+public class OnboardingInfoResponse {
     private String username;
     private int age;
     private String job;
