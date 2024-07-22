@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity(name="user_on_boarding")
+@Entity(name="onboarding")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Onboarding {
@@ -18,13 +18,16 @@ public class Onboarding {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", unique = true, nullable = false)
     private User user;
 
+    @Column(nullable = false)
     private String nickname;
 
+    @Column(nullable = false)
     private int age;
 
+    @Column(nullable = false)
     private String job;
 
     @Builder
