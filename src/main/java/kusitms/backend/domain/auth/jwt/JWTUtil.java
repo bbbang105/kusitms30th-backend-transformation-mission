@@ -41,7 +41,7 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-    public String createAccessToken(Long userId, String name, String provider, String providerId) {
+    public String generateAccessToken(Long userId, String name, String provider, String providerId) {
 
         return Jwts.builder()
                 .claim("userId", userId)
@@ -54,7 +54,7 @@ public class JWTUtil {
                 .compact();
     }
 
-    public String createRefreshToken(Long userId, String name, String provider, String providerId) {
+    public String generateRefreshToken(Long userId, String name, String provider, String providerId) {
 
         return Jwts.builder()
                 .claim("userId", userId)

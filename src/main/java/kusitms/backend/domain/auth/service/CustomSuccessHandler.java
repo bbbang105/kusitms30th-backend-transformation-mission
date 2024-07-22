@@ -9,6 +9,7 @@ import kusitms.backend.domain.auth.jwt.JWTUtil;
 import kusitms.backend.domain.onboarding.entity.Onboarding;
 import kusitms.backend.domain.onboarding.repository.OnboardingRepository;
 import kusitms.backend.domain.token.service.RefreshTokenService;
+import kusitms.backend.global.common.GenerateCookie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -22,8 +23,9 @@ import java.util.Optional;
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JWTUtil jwtUtil;
-    private final OnboardingRepository userOnboardingRepository;
+    private final OnboardingRepository onboardingRepository;
     private final RefreshTokenService refreshTokenService;
+    private final GenerateCookie generateCookie;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -35,17 +37,17 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String provider = customUserDetails.getProvider();
         String providerId = customUserDetails.getProviderId();
 
-        Optional<Onboarding> onboarding = userOnboardingRepository.findByUserId(userId);
-        if (!onboarding.isPresent()) {
+        Optional<Onboarding> onboarding = onboardingRepository.findByUserId(userId);
+        if (onboarding.isEmpty()) {
             // 온보딩 페이지로 리디렉션, 쿠키에 토큰 저장하지 않음
             response.sendRedirect("http://localhost:5173/onboarding?userId=" + userId);
         } else {
             // 기존 회원, 쿠키에 토큰 저장
-            String accessToken = jwtUtil.createAccessToken(userId, name, provider, providerId);
-            String refreshToken = jwtUtil.createRefreshToken(userId, name, provider, providerId);
+            String accessToken = jwtUtil.generateAccessToken(userId, name, provider, providerId);
+            String refreshToken = jwtUtil.generateRefreshToken(userId, name, provider, providerId);
 
-            response.addCookie(createCookie("Authorization", accessToken));
-            response.addCookie(createCookie("Refresh-Token", refreshToken));
+            response.addCookie(generateCookie.generateCookieObject("Authorization", accessToken));
+            response.addCookie(generateCookie.generateCookieObject("Refresh-Token", refreshToken));
 
             // 리프레쉬 토큰 저장
             refreshTokenService.saveOrUpdateToken(userId, refreshToken);
@@ -54,13 +56,5 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         }
     }
 
-    private Cookie createCookie(String key, String value) {
-
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(60*60*60);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        return cookie;
-    }
 
 }

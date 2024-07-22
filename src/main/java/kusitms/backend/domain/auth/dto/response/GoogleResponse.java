@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class GoogleResponse implements OAuth2Response{
 
-    // 구글 반환 객체
+    //    구글 반환 객체
 //    {
 //        resultcode=00, message=success, id=123123123, name=~~~~
 //    }

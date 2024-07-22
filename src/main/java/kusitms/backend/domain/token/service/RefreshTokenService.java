@@ -53,8 +53,8 @@ public class RefreshTokenService {
         String provider = jwtUtil.getProvider(refreshToken);
         String providerId = jwtUtil.getProviderId(refreshToken);
 
-        String newAccessToken = jwtUtil.createAccessToken(userId, name, provider, providerId);
-        String newRefreshToken = jwtUtil.createRefreshToken(userId, name, provider, providerId);
+        String newAccessToken = jwtUtil.generateAccessToken(userId, name, provider, providerId);
+        String newRefreshToken = jwtUtil.generateRefreshToken(userId, name, provider, providerId);
 
         this.saveOrUpdateToken(userId, newRefreshToken);
 

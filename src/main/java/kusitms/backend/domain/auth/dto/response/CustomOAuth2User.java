@@ -1,5 +1,6 @@
 package kusitms.backend.domain.auth.dto.response;
 
+import kusitms.backend.domain.auth.dto.request.UserDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
@@ -10,7 +11,7 @@ import java.util.Map;
 public class CustomOAuth2User implements OAuth2User {
 
     private final UserDTO userDTO;
-    private Long userId;
+    private final Long userId;
 
     public CustomOAuth2User(UserDTO userDTO, Long userId) {
         this.userDTO = userDTO;
