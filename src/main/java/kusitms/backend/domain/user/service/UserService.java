@@ -2,9 +2,8 @@ package kusitms.backend.domain.user.service;
 
 import kusitms.backend.domain.onboarding.dto.request.ModifyUserInfoRequest;
 import kusitms.backend.domain.onboarding.dto.response.UserInfoResponse;
-import kusitms.backend.domain.onboarding.entity.UserOnBoarding;
-import kusitms.backend.domain.onboarding.repository.UserOnBoardingRepository;
-import kusitms.backend.domain.user.repository.UserRepository;
+import kusitms.backend.domain.onboarding.entity.Onboarding;
+import kusitms.backend.domain.onboarding.repository.OnboardingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,16 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserOnBoardingRepository userOnBoardingRepository;
+    private final OnboardingRepository onboardingRepository;
 
     @Transactional(readOnly = true)
     public UserInfoResponse getUserInfo(Long userId) {
-        UserOnBoarding userOnBoarding=userOnBoardingRepository.findByUserId(userId);
-        if (userOnBoarding==null) {
+        Onboarding onboarding = onboardingRepository.findByUserId(userId);
+        if (onboarding ==null) {
             return null;
         }
         else{
-            UserInfoResponse userInfoResponse =new UserInfoResponse(userOnBoarding.getNickname(),userOnBoarding.getAge(),userOnBoarding.getJob());
+            UserInfoResponse userInfoResponse =new UserInfoResponse(onboarding.getNickname(), onboarding.getAge(), onboarding.getJob());
             return userInfoResponse;
 
         }
@@ -30,9 +29,9 @@ public class UserService {
 
     @Transactional
     public void modifyUserInfo(Long userId, ModifyUserInfoRequest modifyUserInfoRequest) {
-        UserOnBoarding userOnBoarding=userOnBoardingRepository.findByUserId(userId);
-        if (userOnBoarding!=null) {
-            userOnBoarding.modifyOnboarding(modifyUserInfoRequest);
+        Onboarding onboarding = onboardingRepository.findByUserId(userId);
+        if (onboarding !=null) {
+            onboarding.modifyOnboarding(modifyUserInfoRequest);
         }
     }
 }

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity(name="user_on_boarding")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class UserOnBoarding {
+public class Onboarding {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -28,7 +28,7 @@ public class UserOnBoarding {
     private String job;
 
     @Builder
-    public UserOnBoarding(User user, String nickname, int age, String job) {
+    public Onboarding(User user, String nickname, int age, String job) {
         this.user = user;
         this.nickname = nickname;
         this.age = age;

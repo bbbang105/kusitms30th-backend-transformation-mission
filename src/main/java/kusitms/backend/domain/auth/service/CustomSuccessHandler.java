@@ -6,25 +6,22 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kusitms.backend.domain.auth.dto.response.CustomOAuth2User;
 import kusitms.backend.domain.auth.jwt.JWTUtil;
-import kusitms.backend.domain.onboarding.entity.UserOnBoarding;
-import kusitms.backend.domain.onboarding.repository.UserOnBoardingRepository;
+import kusitms.backend.domain.onboarding.entity.Onboarding;
+import kusitms.backend.domain.onboarding.repository.OnboardingRepository;
 import kusitms.backend.domain.refreshtoken.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Iterator;
 
 @Service
 @RequiredArgsConstructor
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JWTUtil jwtUtil;
-    private final UserOnBoardingRepository userOnboardingRepository;
+    private final OnboardingRepository userOnboardingRepository;
     private final RefreshTokenService refreshTokenService;
 
     @Override
@@ -37,7 +34,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String provider = customUserDetails.getProvider();
         String providerId = customUserDetails.getProviderId();
 
-        UserOnBoarding onboarding = userOnboardingRepository.findByUserId(userId);
+        Onboarding onboarding = userOnboardingRepository.findByUserId(userId);
         if (onboarding == null) {
             // 온보딩 페이지로 리디렉션, 쿠키에 토큰 저장하지 않음
             response.sendRedirect("http://localhost:5173/onboarding?userId=" + userId);
