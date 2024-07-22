@@ -1,14 +1,14 @@
 package kusitms.backend.domain.token.controller;
 
-import kusitms.backend.domain.auth.jwt.JWTUtil;
 import kusitms.backend.domain.token.dto.response.TokenResponse;
-import kusitms.backend.domain.token.entity.RefreshToken;
 import kusitms.backend.domain.token.service.RefreshTokenService;
 import kusitms.backend.global.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor

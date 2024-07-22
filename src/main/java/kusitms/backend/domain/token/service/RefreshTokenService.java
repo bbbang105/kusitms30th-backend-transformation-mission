@@ -4,7 +4,9 @@ import kusitms.backend.domain.auth.jwt.JWTUtil;
 import kusitms.backend.domain.token.dto.response.TokenResponse;
 import kusitms.backend.domain.token.entity.RefreshToken;
 import kusitms.backend.domain.token.repository.RefreshTokenRepository;
+import kusitms.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +16,6 @@ public class RefreshTokenService {
 
     private final JWTUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
-
 
     @Transactional
     public void saveOrUpdateToken(Long userId, String token) {
@@ -29,11 +30,28 @@ public class RefreshTokenService {
 
     @Transactional
     public TokenResponse refreshAccessToken(String refreshToken) {
+        if (refreshTokenRepository.existsByToken(refreshToken)){
+            if (!jwtUtil.isExpired(refreshToken)) {
+                Long userId = jwtUtil.getUserId(refreshToken);
+                RefreshToken storedRefreshToken = findByUserId(userId);
+                if (storedRefreshToken != null && storedRefreshToken.getToken().equals(refreshToken)) {
+                    String name = jwtUtil.getName(refreshToken);
+                    String provider = jwtUtil.getProvider(refreshToken);
+                    String providerId = jwtUtil.getProviderId(refreshToken);
 
-        if (!jwtUtil.isExpired(refreshToken)) {
-            Long userId = jwtUtil.getUserId(refreshToken);
-            RefreshToken storedRefreshToken = findByUserId(userId);
-            if (storedRefreshToken != null && storedRefreshToken.getToken().equals(refreshToken)) {
+                    String newAccessToken = jwtUtil.createAccessToken(userId, name, provider, providerId);
+                    String newRefreshToken = jwtUtil.createRefreshToken(userId, name, provider, providerId);
+
+                    this.saveOrUpdateToken(userId, newRefreshToken);
+
+                    return TokenResponse.builder()
+                            .accessToken(newAccessToken)
+                            .refreshToken(newRefreshToken)
+                            .build();
+                }
+            }
+            else{
+                Long userId = jwtUtil.getUserId(refreshToken);
                 String name = jwtUtil.getName(refreshToken);
                 String provider = jwtUtil.getProvider(refreshToken);
                 String providerId = jwtUtil.getProviderId(refreshToken);
@@ -43,15 +61,13 @@ public class RefreshTokenService {
 
                 this.saveOrUpdateToken(userId, newRefreshToken);
 
-                TokenResponse tokenResponse = TokenResponse
-                        .builder()
+                return TokenResponse.builder()
                         .accessToken(newAccessToken)
                         .refreshToken(newRefreshToken)
                         .build();
-                return tokenResponse;
             }
         }
-        return null;
+        throw new CustomException(HttpStatus.BAD_REQUEST,"Invalid refresh token");
     }
 
 
