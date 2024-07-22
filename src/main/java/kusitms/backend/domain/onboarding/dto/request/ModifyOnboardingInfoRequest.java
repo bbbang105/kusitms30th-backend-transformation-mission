@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class ModifyOnboardingInfoRequest {
-    private String username;
-    private int age;
-    private String job;
+        private String username;
+        private int age;
+        private String job;
 }

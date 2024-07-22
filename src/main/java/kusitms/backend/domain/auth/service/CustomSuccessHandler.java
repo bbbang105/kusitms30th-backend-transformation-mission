@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +35,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String provider = customUserDetails.getProvider();
         String providerId = customUserDetails.getProviderId();
 
-        Onboarding onboarding = userOnboardingRepository.findByUserId(userId);
-        if (onboarding == null) {
+        Optional<Onboarding> onboarding = userOnboardingRepository.findByUserId(userId);
+        if (!onboarding.isPresent()) {
             // 온보딩 페이지로 리디렉션, 쿠키에 토큰 저장하지 않음
             response.sendRedirect("http://localhost:5173/onboarding?userId=" + userId);
         } else {

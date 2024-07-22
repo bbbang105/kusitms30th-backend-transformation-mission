@@ -9,6 +9,7 @@ import kusitms.backend.domain.onboarding.repository.OnboardingRepository;
 import kusitms.backend.domain.refreshtoken.service.RefreshTokenService;
 import kusitms.backend.domain.user.entity.User;
 import kusitms.backend.domain.user.repository.UserRepository;
+import kusitms.backend.global.common.GenerateCookieString;
 import kusitms.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +27,7 @@ public class OnboardingService {
     private final OnboardingRepository onboardingRepository;
     private final JWTUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
+    private final GenerateCookieString generateCookieString;
 
     @Transactional
     public void onboardUser(Long userId, OnboardingRequest request) {
@@ -45,8 +47,8 @@ public class OnboardingService {
         String refreshToken = jwtUtil.createRefreshToken(user.getId(), user.getName(), user.getProvider(), user.getProviderId());
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Set-Cookie", createCookie("Access-Token", accessToken));
-        headers.add("Set-Cookie", createCookie("Refresh-Token", refreshToken));
+        headers.add("Set-Cookie", generateCookieString.generateCookie("Access-Token", accessToken));
+        headers.add("Set-Cookie", generateCookieString.generateCookie("Refresh-Token", refreshToken));
         headers.setLocation(URI.create("http://localhost:5173"));
 
 //        리프레쉬 토큰 저장
@@ -67,8 +69,4 @@ public class OnboardingService {
         onboarding.modifyOnboarding(request);
     }
 
-//    createCookie 메서드 정의
-    private String createCookie(String name, String value) {
-        return name + "=" + value + "; Path=/; HttpOnly; SameSite=None; Secure";
-    }
 }
