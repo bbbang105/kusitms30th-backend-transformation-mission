@@ -1,4 +1,4 @@
-package kusitms.backend.domain.refreshtoken.entity;
+package kusitms.backend.domain.token.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

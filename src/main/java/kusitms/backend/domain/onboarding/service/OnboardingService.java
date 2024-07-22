@@ -6,7 +6,7 @@ import kusitms.backend.domain.onboarding.dto.request.OnboardingRequest;
 import kusitms.backend.domain.onboarding.dto.response.OnboardingInfoResponse;
 import kusitms.backend.domain.onboarding.entity.Onboarding;
 import kusitms.backend.domain.onboarding.repository.OnboardingRepository;
-import kusitms.backend.domain.refreshtoken.service.RefreshTokenService;
+import kusitms.backend.domain.token.service.RefreshTokenService;
 import kusitms.backend.domain.user.entity.User;
 import kusitms.backend.domain.user.repository.UserRepository;
 import kusitms.backend.global.common.GenerateCookieString;

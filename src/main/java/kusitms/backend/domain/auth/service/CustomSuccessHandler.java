@@ -8,7 +8,7 @@ import kusitms.backend.domain.auth.dto.response.CustomOAuth2User;
 import kusitms.backend.domain.auth.jwt.JWTUtil;
 import kusitms.backend.domain.onboarding.entity.Onboarding;
 import kusitms.backend.domain.onboarding.repository.OnboardingRepository;
-import kusitms.backend.domain.refreshtoken.service.RefreshTokenService;
+import kusitms.backend.domain.token.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
