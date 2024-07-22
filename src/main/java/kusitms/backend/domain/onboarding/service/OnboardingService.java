@@ -1,7 +1,9 @@
 package kusitms.backend.domain.onboarding.service;
 
 import kusitms.backend.domain.auth.jwt.JWTUtil;
+import kusitms.backend.domain.onboarding.dto.request.ModifyUserInfoRequest;
 import kusitms.backend.domain.onboarding.dto.request.OnboardingRequest;
+import kusitms.backend.domain.onboarding.dto.response.UserInfoResponse;
 import kusitms.backend.domain.onboarding.entity.Onboarding;
 import kusitms.backend.domain.onboarding.repository.OnboardingRepository;
 import kusitms.backend.domain.refreshtoken.service.RefreshTokenService;
@@ -49,6 +51,27 @@ public class OnboardingService {
 
 //        리프레쉬 토큰 저장
         refreshTokenService.saveOrUpdateToken(user.getId(), refreshToken);
+    }
+
+    @Transactional(readOnly = true)
+    public UserInfoResponse getUserInfo(Long userId) {
+        Onboarding onboarding = onboardingRepository.findByUserId(userId);
+        if (onboarding ==null) {
+            return null;
+        }
+        else{
+            UserInfoResponse userInfoResponse =new UserInfoResponse(onboarding.getNickname(), onboarding.getAge(), onboarding.getJob());
+            return userInfoResponse;
+
+        }
+    }
+
+    @Transactional
+    public void modifyUserInfo(Long userId, ModifyUserInfoRequest modifyUserInfoRequest) {
+        Onboarding onboarding = onboardingRepository.findByUserId(userId);
+        if (onboarding !=null) {
+            onboarding.modifyOnboarding(modifyUserInfoRequest);
+        }
     }
 
 //    createCookie 메서드 정의
