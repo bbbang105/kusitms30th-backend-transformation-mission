@@ -53,7 +53,7 @@ public class SecurityConfig {
                                 .userService(customOAuth2UserService)))
                         .successHandler(customSuccessHandler))
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/api/onboarding", "/public/**", "/resources/**").permitAll()
+                        .requestMatchers("/","/api/onboarding/**", "/api/token/refresh").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
