@@ -1,7 +1,7 @@
 package kusitms.backend.domain.onboarding.entity;
 
 import jakarta.persistence.*;
-import kusitms.backend.domain.onboarding.dto.request.ModifyUserInfoRequest;
+import kusitms.backend.domain.onboarding.dto.request.ModifyOnboardingInfoRequest;
 import kusitms.backend.domain.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -38,9 +38,9 @@ public class Onboarding {
         this.job = job;
     }
 
-    public void modifyOnboarding(ModifyUserInfoRequest modifyUserInfoRequest) {
-        this.nickname=modifyUserInfoRequest.getUsername();
-        this.age=modifyUserInfoRequest.getAge();
-        this.job=modifyUserInfoRequest.getJob();
+    public void modifyOnboarding(ModifyOnboardingInfoRequest modifyOnboardingInfoRequest) {
+        this.nickname= modifyOnboardingInfoRequest.getUsername();
+        this.age= modifyOnboardingInfoRequest.getAge();
+        this.job= modifyOnboardingInfoRequest.getJob();
     }
 }

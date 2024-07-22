@@ -1,7 +1,7 @@
 package kusitms.backend.domain.onboarding.service;
 
 import kusitms.backend.domain.auth.jwt.JWTUtil;
-import kusitms.backend.domain.onboarding.dto.request.ModifyUserInfoRequest;
+import kusitms.backend.domain.onboarding.dto.request.ModifyOnboardingInfoRequest;
 import kusitms.backend.domain.onboarding.dto.request.OnboardingRequest;
 import kusitms.backend.domain.onboarding.dto.response.OnboardingInfoResponse;
 import kusitms.backend.domain.onboarding.entity.Onboarding;
@@ -57,16 +57,14 @@ public class OnboardingService {
     public OnboardingInfoResponse getOnboardingInfo(Long userId) {
         Onboarding onboarding = onboardingRepository.findByUserId(userId)
                 .orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND,"Onboarding not found"));
-
         return new OnboardingInfoResponse(onboarding.getNickname(), onboarding.getAge(), onboarding.getJob());
     }
 
     @Transactional
-    public void modifyUserInfo(Long userId, ModifyUserInfoRequest modifyUserInfoRequest) {
-        Onboarding onboarding = onboardingRepository.findByUserId(userId);
-        if (onboarding !=null) {
-            onboarding.modifyOnboarding(modifyUserInfoRequest);
-        }
+    public void modifyOnboardingInfo(Long userId, ModifyOnboardingInfoRequest request) {
+        Onboarding onboarding = onboardingRepository.findByUserId(userId)
+                .orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND,"Onboarding not found"));
+        onboarding.modifyOnboarding(request);
     }
 
 //    createCookie 메서드 정의

@@ -1,6 +1,6 @@
 package kusitms.backend.domain.onboarding.controller;
 
-import kusitms.backend.domain.onboarding.dto.request.ModifyUserInfoRequest;
+import kusitms.backend.domain.onboarding.dto.request.ModifyOnboardingInfoRequest;
 import kusitms.backend.domain.onboarding.dto.request.OnboardingRequest;
 import kusitms.backend.domain.onboarding.dto.response.OnboardingInfoResponse;
 import kusitms.backend.domain.onboarding.service.OnboardingService;
@@ -30,7 +30,9 @@ public class OnboardingController {
     }
 
     @PutMapping("/users/{userId}")
-    public void modifyUserInfo(@PathVariable Long userId, @RequestBody ModifyUserInfoRequest modifyUserInfoRequest) {
-        onboardingService.modifyUserInfo(userId, modifyUserInfoRequest);
+    public ResponseEntity<ApiResponse<Void>> modifyOnboardingInfo(@PathVariable Long userId, @RequestBody ModifyOnboardingInfoRequest request) {
+        onboardingService.modifyOnboardingInfo(userId, request);
+        ApiResponse<Void> response= new ApiResponse<>(HttpStatus.OK,"Modify Onboarding Info Successfully",null);
+        return ResponseEntity.ok(response);
     }
 }
