@@ -7,10 +7,7 @@ import kusitms.backend.domain.refreshtoken.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,7 +16,7 @@ public class TokenController {
     private final JWTUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
 
-    @PostMapping("/api/token/refresh")
+    @PutMapping("/api/token/refresh")
     public ResponseEntity<TokenResponse> refreshAccessToken(@CookieValue("Refresh-Token") String refreshToken) {
         System.out.println(refreshToken);
 
