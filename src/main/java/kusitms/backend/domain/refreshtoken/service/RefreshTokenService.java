@@ -12,6 +12,7 @@ public class RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
+
     @Transactional
     public void saveOrUpdateToken(Long userId, String token) {
         RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId);
@@ -20,6 +21,10 @@ public class RefreshTokenService {
         } else {
             refreshToken.updateToken(token);
         }
+        refreshTokenRepository.save(refreshToken);
     }
 
+    public RefreshToken findByUserId(Long userId) {
+        return refreshTokenRepository.findByUserId(userId);
+    }
 }
