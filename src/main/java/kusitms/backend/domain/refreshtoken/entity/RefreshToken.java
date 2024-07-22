@@ -6,10 +6,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity(name = "refresh_token")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class RefreshToken {
 
     @Id
