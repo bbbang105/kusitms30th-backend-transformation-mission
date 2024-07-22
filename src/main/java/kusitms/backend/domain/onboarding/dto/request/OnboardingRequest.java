@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class OnboardingRequest {
-        private Long userId;
         private String nickname;
         private int age;
         private String job;

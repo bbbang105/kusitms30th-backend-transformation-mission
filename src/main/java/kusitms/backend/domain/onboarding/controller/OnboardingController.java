@@ -6,6 +6,7 @@ import kusitms.backend.global.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class OnboardingController {
     private final OnboardingService onboardingService;
 
-    @PostMapping("/api/onboarding")
-    public ResponseEntity<ApiResponse<Void>> onboardUser(@RequestBody OnboardingRequest request) {
-        onboardingService.onboardUser(request);
+    @PostMapping("/users/{userId}/onboarding")
+    public ResponseEntity<ApiResponse<Void>> onboardUser(@PathVariable Long userId, @RequestBody OnboardingRequest request) {
+        onboardingService.onboardUser(userId, request);
         ApiResponse<Void> response= new ApiResponse<>(HttpStatus.CREATED,"User registered successfully",null);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

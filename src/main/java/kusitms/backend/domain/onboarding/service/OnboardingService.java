@@ -26,8 +26,8 @@ public class OnboardingService {
     private final RefreshTokenService refreshTokenService;
 
     @Transactional
-    public void onboardUser(OnboardingRequest request) {
-        User user = userRepository.findById(request.getUserId())
+    public void onboardUser(Long userId, OnboardingRequest request) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND,"User not found"));
 
         Onboarding onboarding = Onboarding.builder()
