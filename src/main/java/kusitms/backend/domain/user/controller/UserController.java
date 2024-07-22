@@ -1,10 +1,10 @@
 package kusitms.backend.domain.user.controller;
 
+import kusitms.backend.domain.onboarding.dto.request.ModifyUserInfoRequest;
+import kusitms.backend.domain.onboarding.dto.response.UserInfoResponse;
 import kusitms.backend.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,8 +14,13 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     public UserInfoResponse getUserInfo(@PathVariable Long userId) {
-        return UserService.getUserInfo(userId);
+        UserInfoResponse userInfoResponse = userService.getUserInfo(userId);
+        return userInfoResponse;
     }
 
+    @PutMapping("/users/{userId}")
+    public void modifyUserInfo(@PathVariable Long userId, @RequestBody ModifyUserInfoRequest modifyUserInfoRequest) {
+        userService.modifyUserInfo(userId, modifyUserInfoRequest);
+    }
 
 }
