@@ -28,6 +28,7 @@ public class RefreshTokenService {
         }
     }
 
+
     @Transactional
     public TokenResponse refreshAccessToken(String refreshToken) {
         if (refreshTokenRepository.existsByToken(refreshToken)){
@@ -35,45 +36,36 @@ public class RefreshTokenService {
                 Long userId = jwtUtil.getUserId(refreshToken);
                 RefreshToken storedRefreshToken = findByUserId(userId);
                 if (storedRefreshToken != null && storedRefreshToken.getToken().equals(refreshToken)) {
-                    String name = jwtUtil.getName(refreshToken);
-                    String provider = jwtUtil.getProvider(refreshToken);
-                    String providerId = jwtUtil.getProviderId(refreshToken);
-
-                    String newAccessToken = jwtUtil.createAccessToken(userId, name, provider, providerId);
-                    String newRefreshToken = jwtUtil.createRefreshToken(userId, name, provider, providerId);
-
-                    this.saveOrUpdateToken(userId, newRefreshToken);
-
-                    return TokenResponse.builder()
-                            .accessToken(newAccessToken)
-                            .refreshToken(newRefreshToken)
-                            .build();
+                    return getTokenResponseByRefreshToken(refreshToken);
                 }
             }
             else{
-                Long userId = jwtUtil.getUserId(refreshToken);
-                String name = jwtUtil.getName(refreshToken);
-                String provider = jwtUtil.getProvider(refreshToken);
-                String providerId = jwtUtil.getProviderId(refreshToken);
-
-                String newAccessToken = jwtUtil.createAccessToken(userId, name, provider, providerId);
-                String newRefreshToken = jwtUtil.createRefreshToken(userId, name, provider, providerId);
-
-                this.saveOrUpdateToken(userId, newRefreshToken);
-
-                return TokenResponse.builder()
-                        .accessToken(newAccessToken)
-                        .refreshToken(newRefreshToken)
-                        .build();
+                return getTokenResponseByRefreshToken(refreshToken);
             }
         }
         throw new CustomException(HttpStatus.BAD_REQUEST,"Invalid refresh token");
     }
 
-
-
     @Transactional(readOnly = true)
     public RefreshToken findByUserId(Long userId) {
         return refreshTokenRepository.findByUserId(userId);
+    }
+
+    @Transactional
+    public TokenResponse getTokenResponseByRefreshToken(String refreshToken) {
+        Long userId = jwtUtil.getUserId(refreshToken);
+        String name = jwtUtil.getName(refreshToken);
+        String provider = jwtUtil.getProvider(refreshToken);
+        String providerId = jwtUtil.getProviderId(refreshToken);
+
+        String newAccessToken = jwtUtil.createAccessToken(userId, name, provider, providerId);
+        String newRefreshToken = jwtUtil.createRefreshToken(userId, name, provider, providerId);
+
+        this.saveOrUpdateToken(userId, newRefreshToken);
+
+        return TokenResponse.builder()
+                .accessToken(newAccessToken)
+                .refreshToken(newRefreshToken)
+                .build();
     }
 }
