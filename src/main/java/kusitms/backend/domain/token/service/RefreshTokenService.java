@@ -46,11 +46,6 @@ public class RefreshTokenService {
         throw new CustomException(HttpStatus.BAD_REQUEST,"Invalid refresh token");
     }
 
-    @Transactional(readOnly = true)
-    public RefreshToken findByUserId(Long userId) {
-        return refreshTokenRepository.findByUserId(userId);
-    }
-
     @Transactional
     public TokenResponse getTokenResponseByRefreshToken(String refreshToken) {
         Long userId = jwtUtil.getUserId(refreshToken);
@@ -68,4 +63,10 @@ public class RefreshTokenService {
                 .refreshToken(newRefreshToken)
                 .build();
     }
+
+    @Transactional(readOnly = true)
+    public RefreshToken findByUserId(Long userId) {
+        return refreshTokenRepository.findByUserId(userId);
+    }
+
 }
