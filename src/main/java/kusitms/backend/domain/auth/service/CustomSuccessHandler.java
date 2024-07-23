@@ -3,7 +3,7 @@ package kusitms.backend.domain.auth.service;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import kusitms.backend.domain.auth.dto.response.CustomOAuth2User;
+import kusitms.backend.domain.auth.security.CustomOAuth2User;
 import kusitms.backend.domain.auth.jwt.JWTUtil;
 import kusitms.backend.domain.onboarding.entity.Onboarding;
 import kusitms.backend.domain.onboarding.repository.OnboardingRepository;
@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -27,14 +28,15 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final GenerateCookie generateCookie;
 
     @Override
+    @Transactional
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
-        CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
+        CustomOAuth2User customOAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
-        Long userId = customUserDetails.getId();
-        String name = customUserDetails.getName();
-        String provider = customUserDetails.getProvider();
-        String providerId = customUserDetails.getProviderId();
+        Long userId = customOAuth2User.getId();
+        String name = customOAuth2User.getName();
+        String provider = customOAuth2User.getProvider();
+        String providerId = customOAuth2User.getProviderId();
 
         Optional<Onboarding> onboarding = onboardingRepository.findByUserId(userId);
         if (onboarding.isEmpty()) {
@@ -45,7 +47,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             String accessToken = jwtUtil.generateToken(userId, name, provider, providerId,3600000L); //1시간
             String refreshToken = jwtUtil.generateToken(userId, name, provider, providerId,1209600000L); //14일
 
-            response.addCookie(generateCookie.generateCookieObject("Authorization", accessToken));
+            response.addCookie(generateCookie.generateCookieObject("Access-Token", accessToken));
             response.addCookie(generateCookie.generateCookieObject("Refresh-Token", refreshToken));
 
             // 리프레쉬 토큰 저장
@@ -54,6 +56,4 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             response.sendRedirect("http://localhost:5173");
         }
     }
-
-
 }

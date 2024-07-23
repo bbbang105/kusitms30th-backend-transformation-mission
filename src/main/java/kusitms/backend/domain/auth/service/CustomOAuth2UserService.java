@@ -1,7 +1,7 @@
 package kusitms.backend.domain.auth.service;
 
-import kusitms.backend.domain.auth.dto.request.UserDTO;
-import kusitms.backend.domain.auth.dto.response.CustomOAuth2User;
+import kusitms.backend.domain.auth.dto.request.OAuth2UserDTO;
+import kusitms.backend.domain.auth.security.CustomOAuth2User;
 import kusitms.backend.domain.auth.dto.response.GoogleResponse;
 import kusitms.backend.domain.auth.dto.response.NaverResponse;
 import kusitms.backend.domain.auth.dto.response.OAuth2Response;
@@ -47,15 +47,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .providerId(oAuth2Response.getProviderId())
                     .build();
             userRepository.save(user);
-            UserDTO userDTO = UserDTO.of(oAuth2Response.getName(),oAuth2Response.getProvider(), oAuth2Response.getProviderId());
-            return new CustomOAuth2User(userDTO, user.getId());
+            OAuth2UserDTO oAuth2UserDTO = OAuth2UserDTO.of(oAuth2Response.getName(),oAuth2Response.getProvider(), oAuth2Response.getProviderId());
+            return new CustomOAuth2User(oAuth2UserDTO, user.getId());
         }
         else{
 //          소셜에서의 name이 수정되었을 수도 있으므로 업데이트를 해준다.
             existData.modifyUserName(oAuth2Response.getName());
 
-            UserDTO userDTO = UserDTO.of(oAuth2Response.getName(),oAuth2Response.getProvider(), oAuth2Response.getProviderId());
-            return new CustomOAuth2User(userDTO, existData.getId());
+            OAuth2UserDTO oAuth2UserDTO = OAuth2UserDTO.of(oAuth2Response.getName(),oAuth2Response.getProvider(), oAuth2Response.getProviderId());
+            return new CustomOAuth2User(oAuth2UserDTO, existData.getId());
         }
 
     }

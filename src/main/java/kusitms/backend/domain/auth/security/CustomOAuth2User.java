@@ -1,21 +1,20 @@
-package kusitms.backend.domain.auth.dto.response;
+package kusitms.backend.domain.auth.security;
 
-import kusitms.backend.domain.auth.dto.request.UserDTO;
+import kusitms.backend.domain.auth.dto.request.OAuth2UserDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
 public class CustomOAuth2User implements OAuth2User {
 
-    private final UserDTO userDTO;
+    private final OAuth2UserDTO OAuth2UserDTO;
     private final Long userId;
 
-    public CustomOAuth2User(UserDTO userDTO, Long userId) {
-        this.userDTO = userDTO;
+    public CustomOAuth2User(OAuth2UserDTO OAuth2UserDTO, Long userId) {
+        this.OAuth2UserDTO = OAuth2UserDTO;
         this.userId = userId;
     }
 
@@ -37,14 +36,14 @@ public class CustomOAuth2User implements OAuth2User {
 
     @Override
     public String getName() {
-        return userDTO.getName();
+        return OAuth2UserDTO.getName();
     }
 
     public String getProvider(){
-        return userDTO.getProvider();
+        return OAuth2UserDTO.getProvider();
     }
 
     public String getProviderId(){
-        return userDTO.getProviderId();
+        return OAuth2UserDTO.getProviderId();
     }
 }

@@ -4,8 +4,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import kusitms.backend.domain.auth.dto.response.CustomOAuth2User;
-import kusitms.backend.domain.auth.dto.request.UserDTO;
+import kusitms.backend.domain.auth.security.CustomOAuth2User;
+import kusitms.backend.domain.auth.dto.request.OAuth2UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,8 +36,8 @@ public class JWTFilter extends OncePerRequestFilter {
 
         Long userId = jwtUtil.getUserId(token);
 
-        UserDTO userDTO = UserDTO.of(jwtUtil.getName(token),jwtUtil.getProvider(token),jwtUtil.getProviderId(token));
-        CustomOAuth2User customOAuth2User = new CustomOAuth2User(userDTO, userId);
+        OAuth2UserDTO oAuth2UserDTO = OAuth2UserDTO.of(jwtUtil.getName(token),jwtUtil.getProvider(token),jwtUtil.getProviderId(token));
+        CustomOAuth2User customOAuth2User = new CustomOAuth2User(oAuth2UserDTO, userId);
         Authentication authToken = new UsernamePasswordAuthenticationToken(customOAuth2User, null, customOAuth2User.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authToken);
 

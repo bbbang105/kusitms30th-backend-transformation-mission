@@ -1,18 +1,17 @@
 package kusitms.backend.domain.auth.dto.request;
 
-import kusitms.backend.domain.auth.dto.response.OAuth2Response;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class UserDTO {
+public class OAuth2UserDTO {
     private String name;
     private String provider;
     private String providerId;
 
-    public static UserDTO of(String name, String provider, String providerId) {
-        return new UserDTO(name, provider, providerId);
+    public static OAuth2UserDTO of(String name, String provider, String providerId) {
+        return new OAuth2UserDTO(name, provider, providerId);
     }
 
 }
