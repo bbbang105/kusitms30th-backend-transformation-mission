@@ -1,5 +1,6 @@
 package kusitms.backend.domain.onboarding.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kusitms.backend.domain.auth.jwt.JWTUtil;
 import kusitms.backend.domain.onboarding.dto.request.ModifyOnboardingInfoRequest;
 import kusitms.backend.domain.onboarding.dto.request.OnboardingRequest;
@@ -28,6 +29,7 @@ public class OnboardingService {
     private final JWTUtil jwtUtil;
     private final TokenService tokenService;
     private final GenerateCookie generateCookie;
+    private final HttpServletRequest httpServletRequest;
 
     @Transactional
     public void onboardUser(Long userId, OnboardingRequest request) {
@@ -59,16 +61,33 @@ public class OnboardingService {
 //    단, 아래 마이페이지 수정과 같이 수정에서는 보통 사용하지 않음(인스턴스 메소드 사용)
     @Transactional(readOnly = true)
     public OnboardingInfoResponse getOnboardingInfo(Long userId) {
+        checkMatchingTokenAndUserId(userId);
         Onboarding onboarding = onboardingRepository.findByUserId(userId)
-                .orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND,"Onboarding not found"));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Onboarding not found"));
         return OnboardingInfoResponse.from(onboarding);
     }
 
     @Transactional
     public void modifyOnboardingInfo(Long userId, ModifyOnboardingInfoRequest request) {
+        checkMatchingTokenAndUserId(userId);
         Onboarding onboarding = onboardingRepository.findByUserId(userId)
                 .orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND,"Onboarding not found"));
         onboarding.modifyOnboarding(request);
+    }
+
+    @Transactional(readOnly = true)
+    public void checkMatchingTokenAndUserId(Long userId) {
+        String authorizationHeader = httpServletRequest.getHeader("Authorization");
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            throw new CustomException(HttpStatus.UNAUTHORIZED, "Unauthorized Token");
+        }
+
+        String token = authorizationHeader.substring(7);
+        Long authenticatedUserId =jwtUtil.getUserId(token);
+
+        if (!authenticatedUserId.equals(userId)) {
+            throw new CustomException(HttpStatus.FORBIDDEN, "Access denied: User ID mismatch");
+        }
     }
 
 }
