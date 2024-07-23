@@ -53,7 +53,8 @@ public class SecurityConfig {
                                 .userService(customOAuth2UserService)))
                         .successHandler(customSuccessHandler))
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/users/{userId}/onboarding").permitAll()
+                        .requestMatchers("login","/users/{userId}/onboarding").permitAll()
+                        .requestMatchers("/swagger-ui.html", "/v3/api-docs", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // Swagger 관련 엔드포인트 허용
                         .anyRequest().authenticated())
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
