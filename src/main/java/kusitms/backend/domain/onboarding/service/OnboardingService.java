@@ -59,7 +59,7 @@ public class OnboardingService {
     public OnboardingInfoResponse getOnboardingInfo(Long userId) {
         Onboarding onboarding = onboardingRepository.findByUserId(userId)
                 .orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND,"Onboarding not found"));
-        return new OnboardingInfoResponse(onboarding.getNickname(), onboarding.getAge(), onboarding.getJob());
+        return OnboardingInfoResponse.from(onboarding);
     }
 
     @Transactional
