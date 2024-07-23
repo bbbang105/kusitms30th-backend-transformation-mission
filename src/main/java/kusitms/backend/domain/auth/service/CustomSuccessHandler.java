@@ -1,14 +1,13 @@
 package kusitms.backend.domain.auth.service;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kusitms.backend.domain.auth.dto.response.CustomOAuth2User;
 import kusitms.backend.domain.auth.jwt.JWTUtil;
 import kusitms.backend.domain.onboarding.entity.Onboarding;
 import kusitms.backend.domain.onboarding.repository.OnboardingRepository;
-import kusitms.backend.domain.token.service.RefreshTokenService;
+import kusitms.backend.domain.token.service.TokenService;
 import kusitms.backend.global.common.GenerateCookie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -24,7 +23,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final JWTUtil jwtUtil;
     private final OnboardingRepository onboardingRepository;
-    private final RefreshTokenService refreshTokenService;
+    private final TokenService tokenService;
     private final GenerateCookie generateCookie;
 
     @Override
@@ -50,7 +49,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             response.addCookie(generateCookie.generateCookieObject("Refresh-Token", refreshToken));
 
             // 리프레쉬 토큰 저장
-            refreshTokenService.saveOrUpdateToken(userId, refreshToken);
+            tokenService.saveOrUpdateToken(userId, refreshToken);
 
             response.sendRedirect("http://localhost:5173");
         }

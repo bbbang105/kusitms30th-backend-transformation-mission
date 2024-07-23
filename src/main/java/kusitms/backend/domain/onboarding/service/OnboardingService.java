@@ -6,7 +6,7 @@ import kusitms.backend.domain.onboarding.dto.request.OnboardingRequest;
 import kusitms.backend.domain.onboarding.dto.response.OnboardingInfoResponse;
 import kusitms.backend.domain.onboarding.entity.Onboarding;
 import kusitms.backend.domain.onboarding.repository.OnboardingRepository;
-import kusitms.backend.domain.token.service.RefreshTokenService;
+import kusitms.backend.domain.token.service.TokenService;
 import kusitms.backend.domain.user.entity.User;
 import kusitms.backend.domain.user.repository.UserRepository;
 import kusitms.backend.global.common.GenerateCookie;
@@ -26,7 +26,7 @@ public class OnboardingService {
     private final UserRepository userRepository;
     private final OnboardingRepository onboardingRepository;
     private final JWTUtil jwtUtil;
-    private final RefreshTokenService refreshTokenService;
+    private final TokenService tokenService;
     private final GenerateCookie generateCookie;
 
     @Transactional
@@ -52,9 +52,11 @@ public class OnboardingService {
         headers.setLocation(URI.create("http://localhost:5173"));
 
 //        리프레쉬 토큰 저장
-        refreshTokenService.saveOrUpdateToken(user.getId(), refreshToken);
+        tokenService.saveOrUpdateToken(user.getId(), refreshToken);
     }
 
+//    정적 팩토리 메소드는 객체 생성 시 사용하면 좋음(객체지향적)
+//    단, 아래 마이페이지 수정과 같이 수정에서는 보통 사용하지 않음(인스턴스 메소드 사용)
     @Transactional(readOnly = true)
     public OnboardingInfoResponse getOnboardingInfo(Long userId) {
         Onboarding onboarding = onboardingRepository.findByUserId(userId)

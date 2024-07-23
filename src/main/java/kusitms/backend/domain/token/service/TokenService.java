@@ -12,14 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class RefreshTokenService {
+public class TokenService {
 
     private final JWTUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
     public void saveOrUpdateToken(Long userId, String token) {
-        RefreshToken refreshToken = findByUserId(userId);
+        RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId);
         if (refreshToken == null) {
             refreshToken = new RefreshToken(userId, token);
             refreshTokenRepository.save(refreshToken);
@@ -28,23 +28,24 @@ public class RefreshTokenService {
         }
     }
 
-
     @Transactional
     public TokenResponse refreshAccessToken(String refreshToken) {
-        if (refreshTokenRepository.existsByToken(refreshToken)){
-            if (!jwtUtil.isExpired(refreshToken)) {
-                Long userId = jwtUtil.getUserId(refreshToken);
-                RefreshToken storedRefreshToken = findByUserId(userId);
-                if (storedRefreshToken != null && storedRefreshToken.getToken().equals(refreshToken)) {
-                    return getTokenResponseByRefreshToken(refreshToken);
-                }
-            }
-            else{
-                return getTokenResponseByRefreshToken(refreshToken);
-            }
+        if (!refreshTokenRepository.existsByToken(refreshToken)) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, "Invalid refresh token");
         }
-        throw new CustomException(HttpStatus.BAD_REQUEST,"Invalid refresh token");
+        if (jwtUtil.isExpired(refreshToken)) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, "Expired refresh token");
+        }
+
+        Long userId = jwtUtil.getUserId(refreshToken);
+        RefreshToken storedRefreshToken = refreshTokenRepository.findByUserId(userId);
+        if (storedRefreshToken == null || !storedRefreshToken.getToken().equals(refreshToken)) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, "Invalid refresh token");
+        }
+
+        return getTokenResponseByRefreshToken(refreshToken);
     }
+
 
     @Transactional
     public TokenResponse getTokenResponseByRefreshToken(String refreshToken) {
@@ -62,11 +63,6 @@ public class RefreshTokenService {
                 .accessToken(newAccessToken)
                 .refreshToken(newRefreshToken)
                 .build();
-    }
-
-    @Transactional(readOnly = true)
-    public RefreshToken findByUserId(Long userId) {
-        return refreshTokenRepository.findByUserId(userId);
     }
 
 }
