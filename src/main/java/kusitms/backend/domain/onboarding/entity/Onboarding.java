@@ -39,7 +39,7 @@ public class Onboarding {
     }
 
     public void modifyOnboarding(ModifyOnboardingInfoRequest modifyOnboardingInfoRequest) {
-        this.nickname= modifyOnboardingInfoRequest.getUsername();
+        this.nickname= modifyOnboardingInfoRequest.getNickname();
         this.age= modifyOnboardingInfoRequest.getAge();
         this.job= modifyOnboardingInfoRequest.getJob();
     }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 public class OnboardingInfoResponse {
-    private String username;
+    private String nickname;
     private int age;
     private String job;
 
