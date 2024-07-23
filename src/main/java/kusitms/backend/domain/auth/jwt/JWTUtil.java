@@ -18,6 +18,7 @@ public class JWTUtil {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
 
+//    JWT Parser 공통 메소드
     public Claims jwtParser(String token){
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
     }
@@ -43,18 +44,30 @@ public class JWTUtil {
 
     public Boolean isExpired(String token) {
 
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+        return jwtParser(token).getExpiration().before(new Date());
     }
 
-    public String generateAccessToken(Long userId, String name, String provider, String providerId) {
+//    public String generateAccessToken(Long userId, String name, String provider, String providerId) {
+//
+//        return Jwts.builder()
+//                .claim("userId", userId)
+//                .claim("name", name)
+//                .claim("provider", provider)
+//                .claim("providerId", providerId)
+//                .issuedAt(new Date(System.currentTimeMillis()))
+//                .expiration(new Date(System.currentTimeMillis() + 3600000)) //1시간 밀리초로 변환
+//                .signWith(secretKey)
+//                .compact();
+//    }
 
+    public String generateRefreshToken(Long userId, String name, String provider, String providerId) {
         return Jwts.builder()
                 .claim("userId", userId)
                 .claim("name", name)
                 .claim("provider", provider)
                 .claim("providerId", providerId)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 3600000)) //1시간 밀리초로 변환
+                .expiration(new Date(System.currentTimeMillis() + 1209600000)) //14일 밀리초로 변환
                 .signWith(secretKey)
                 .compact();
     }
