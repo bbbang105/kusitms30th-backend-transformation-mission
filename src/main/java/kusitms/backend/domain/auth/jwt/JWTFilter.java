@@ -42,12 +42,8 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
         Long userId = jwtUtil.getUserId(token);
-        UserDTO userDTO = UserDTO.builder()
-                .name(jwtUtil.getName(token))
-                .provider(jwtUtil.getProvider(token))
-                .providerId(jwtUtil.getProviderId(token))
-                .build();
 
+        UserDTO userDTO = UserDTO.of(jwtUtil.getName(token),jwtUtil.getProvider(token),jwtUtil.getProviderId(token));
         CustomOAuth2User customOAuth2User = new CustomOAuth2User(userDTO, userId);
         Authentication authToken = new UsernamePasswordAuthenticationToken(customOAuth2User, null, customOAuth2User.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authToken);

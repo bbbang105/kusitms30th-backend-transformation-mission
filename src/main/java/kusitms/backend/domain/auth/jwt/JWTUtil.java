@@ -1,5 +1,6 @@
 package kusitms.backend.domain.auth.jwt;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,23 +18,27 @@ public class JWTUtil {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
 
+    public Claims jwtParser(String token){
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
+    }
+
     public Long getUserId(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", Long.class);
+        return jwtParser(token).get("userId", Long.class);
     }
 
     public String getName(String token) {
 
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("name", String.class);
+        return jwtParser(token).get("name", String.class);
     }
 
     public String getProvider(String token) {
 
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("provider", String.class);
+        return jwtParser(token).get("provider", String.class);
     }
 
     public String getProviderId(String token) {
 
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("providerId", String.class);
+        return jwtParser(token).get("providerId", String.class);
     }
 
     public Boolean isExpired(String token) {
@@ -55,7 +60,6 @@ public class JWTUtil {
     }
 
     public String generateRefreshToken(Long userId, String name, String provider, String providerId) {
-
         return Jwts.builder()
                 .claim("userId", userId)
                 .claim("name", name)
@@ -66,4 +70,6 @@ public class JWTUtil {
                 .signWith(secretKey)
                 .compact();
     }
+
+
 }
