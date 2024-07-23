@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
@@ -45,24 +47,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .build();
             userRepository.save(user);
 
-            UserDTO userDTO = UserDTO.builder()
-                    .name(oAuth2Response.getName())
-                    .provider(oAuth2Response.getProvider())
-                    .providerId(oAuth2Response.getProviderId())
-                    .build();
-            return new CustomOAuth2User(userDTO,user.getId());
+            return new CustomOAuth2User(UserDTO.from(oAuth2Response), user.getId());
         }
         else{
 //          소셜에서의 name이 수정되었을 수도 있으므로 업데이트를 해준다.
             existData.modifyUserName(oAuth2Response.getName());
-            userRepository.save(existData);
 
-            UserDTO userDTO = UserDTO.builder()
-                    .name(oAuth2Response.getName())
-                    .provider(oAuth2Response.getProvider())
-                    .providerId(oAuth2Response.getProviderId())
-                    .build();
-            return new CustomOAuth2User(userDTO,existData.getId());
+            return new CustomOAuth2User(UserDTO.from(oAuth2Response), existData.getId());
         }
 
     }
