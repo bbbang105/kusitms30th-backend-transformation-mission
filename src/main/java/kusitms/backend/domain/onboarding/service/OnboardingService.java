@@ -43,8 +43,8 @@ public class OnboardingService {
         onboardingRepository.save(onboarding);
 
 //        토큰 생성 및 쿠키 설정
-        String accessToken = jwtUtil.generateAccessToken(user.getId(), user.getName(), user.getProvider(), user.getProviderId());
-        String refreshToken = jwtUtil.generateRefreshToken(user.getId(), user.getName(), user.getProvider(), user.getProviderId());
+        String accessToken = jwtUtil.generateToken(user.getId(), user.getName(), user.getProvider(), user.getProviderId(),3600000L); //1시간
+        String refreshToken = jwtUtil.generateToken(user.getId(), user.getName(), user.getProvider(), user.getProviderId(),1209600000L); //14일
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Set-Cookie", generateCookie.generateCookieString("Access-Token", accessToken));

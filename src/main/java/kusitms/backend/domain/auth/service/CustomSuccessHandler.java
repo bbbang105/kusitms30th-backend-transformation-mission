@@ -42,8 +42,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             response.sendRedirect("http://localhost:5173/onboarding?userId=" + userId);
         } else {
             // 기존 회원, 쿠키에 토큰 저장
-            String accessToken = jwtUtil.generateAccessToken(userId, name, provider, providerId);
-            String refreshToken = jwtUtil.generateRefreshToken(userId, name, provider, providerId);
+            String accessToken = jwtUtil.generateToken(userId, name, provider, providerId,3600000L); //1시간
+            String refreshToken = jwtUtil.generateToken(userId, name, provider, providerId,1209600000L); //14일
 
             response.addCookie(generateCookie.generateCookieObject("Authorization", accessToken));
             response.addCookie(generateCookie.generateCookieObject("Refresh-Token", refreshToken));

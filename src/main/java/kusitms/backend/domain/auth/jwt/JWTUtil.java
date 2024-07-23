@@ -60,26 +60,27 @@ public class JWTUtil {
 //                .compact();
 //    }
 
-    public String generateRefreshToken(Long userId, String name, String provider, String providerId) {
-        return Jwts.builder()
-                .claim("userId", userId)
-                .claim("name", name)
-                .claim("provider", provider)
-                .claim("providerId", providerId)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1209600000)) //14일 밀리초로 변환
-                .signWith(secretKey)
-                .compact();
-    }
+//    public String generateRefreshToken(Long userId, String name, String provider, String providerId) {
+//        return Jwts.builder()
+//                .claim("userId", userId)
+//                .claim("name", name)
+//                .claim("provider", provider)
+//                .claim("providerId", providerId)
+//                .issuedAt(new Date(System.currentTimeMillis()))
+//                .expiration(new Date(System.currentTimeMillis() + 1209600000)) //14일 밀리초로 변환
+//                .signWith(secretKey)
+//                .compact();
+//    }
 
-    public String generateRefreshToken(Long userId, String name, String provider, String providerId) {
+//    공통 토큰 생성 메소드
+    public String generateToken(Long userId, String name, String provider, String providerId, Long expiredMs ) {
         return Jwts.builder()
                 .claim("userId", userId)
                 .claim("name", name)
                 .claim("provider", provider)
                 .claim("providerId", providerId)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1209600000)) //14일 밀리초로 변환
+                .expiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(secretKey)
                 .compact();
     }
