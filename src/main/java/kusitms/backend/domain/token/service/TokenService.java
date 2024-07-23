@@ -59,10 +59,7 @@ public class TokenService {
 
         this.saveOrUpdateToken(userId, newRefreshToken);
 
-        return TokenResponse.builder()
-                .accessToken(newAccessToken)
-                .refreshToken(newRefreshToken)
-                .build();
+        return TokenResponse.of(newAccessToken, newRefreshToken);
     }
 
 }
