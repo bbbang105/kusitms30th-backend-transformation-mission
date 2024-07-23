@@ -1,5 +1,6 @@
 package kusitms.backend.domain.onboarding.controller;
 
+import jakarta.validation.Valid;
 import kusitms.backend.domain.onboarding.dto.request.ModifyOnboardingInfoRequest;
 import kusitms.backend.domain.onboarding.dto.request.OnboardingRequest;
 import kusitms.backend.domain.onboarding.dto.response.OnboardingInfoResponse;
@@ -16,7 +17,7 @@ public class OnboardingController {
     private final OnboardingService onboardingService;
 
     @PostMapping("/users/{userId}/onboarding")
-    public ResponseEntity<ApiResponse<Void>> onboardUser(@PathVariable Long userId, @RequestBody OnboardingRequest request) {
+    public ResponseEntity<ApiResponse<Void>> onboardUser(@PathVariable Long userId, @Valid @RequestBody OnboardingRequest request) {
         onboardingService.onboardUser(userId, request);
         ApiResponse<Void> response= new ApiResponse<>(HttpStatus.CREATED,"User registered successfully",null);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -30,7 +31,7 @@ public class OnboardingController {
     }
 
     @PutMapping("/users/{userId}")
-    public ResponseEntity<ApiResponse<Void>> modifyOnboardingInfo(@PathVariable Long userId, @RequestBody ModifyOnboardingInfoRequest request) {
+    public ResponseEntity<ApiResponse<Void>> modifyOnboardingInfo(@PathVariable Long userId, @Valid @RequestBody ModifyOnboardingInfoRequest request) {
         onboardingService.modifyOnboardingInfo(userId, request);
         ApiResponse<Void> response= new ApiResponse<>(HttpStatus.OK,"Modify Onboarding Info Successfully",null);
         return ResponseEntity.ok(response);
