@@ -1,5 +1,7 @@
 package kusitms.backend.domain.auth.dto.response;
 
+import kusitms.backend.domain.user.entity.Provider;
+
 import java.util.Map;
 
 public class NaverResponse implements OAuth2Response{
@@ -17,7 +19,7 @@ public class NaverResponse implements OAuth2Response{
 
     @Override
     public String getProvider() {
-        return "naver";
+        return Provider.NAVER.getProviderName();
     }
 
     @Override
