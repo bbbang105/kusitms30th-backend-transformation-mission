@@ -10,6 +10,7 @@ import kusitms.backend.domain.onboarding.repository.OnboardingRepository;
 import kusitms.backend.domain.token.service.TokenService;
 import kusitms.backend.global.common.GenerateCookie;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
@@ -44,8 +45,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             response.sendRedirect("http://localhost:5173/onboarding?userId=" + userId);
         } else {
             // 기존 회원, 쿠키에 토큰 저장
-            String accessToken = jwtUtil.generateToken(userId, name, provider, providerId,3600000L); //1시간
-            String refreshToken = jwtUtil.generateToken(userId, name, provider, providerId,1209600000L); //14일
+            String accessToken = jwtUtil.generateAccessToken(userId, name, provider, providerId);
+            String refreshToken = jwtUtil.generateRefreshToken(userId, name, provider, providerId);
 
             response.addCookie(generateCookie.generateCookieObject("Access-Token", accessToken));
             response.addCookie(generateCookie.generateCookieObject("Refresh-Token", refreshToken));

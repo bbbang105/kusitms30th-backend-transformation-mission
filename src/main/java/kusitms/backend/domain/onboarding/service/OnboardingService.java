@@ -57,8 +57,8 @@ public class OnboardingService {
     }
 
     private Map<String, String> generateTokens(User user) {
-        String accessToken = jwtUtil.generateToken(user.getId(), user.getName(), user.getProvider(), user.getProviderId(), 3600000L); // 1시간
-        String refreshToken = jwtUtil.generateToken(user.getId(), user.getName(), user.getProvider(), user.getProviderId(), 1209600000L); // 14일
+        String accessToken = jwtUtil.generateAccessToken(user.getId(), user.getName(), user.getProvider(), user.getProviderId());
+        String refreshToken = jwtUtil.generateRefreshToken(user.getId(), user.getName(), user.getProvider(), user.getProviderId());
         Map<String, String> tokens = new HashMap<>();
         tokens.put("accessToken", accessToken);
         tokens.put("refreshToken", refreshToken);

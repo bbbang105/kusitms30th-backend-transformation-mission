@@ -12,7 +12,13 @@ import java.util.Date;
 
 @Component
 public class JWTUtil {
+
     private SecretKey secretKey;
+    @Value("${spring.jwt.access-token-validity}")
+    private Long accessTokenValidity;
+    @Value("${spring.jwt.refresh-token-validity}")
+    private Long refreshTokenValidity;
+
 
     public JWTUtil(@Value("${spring.jwt.secret}")String secret) {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
@@ -47,15 +53,27 @@ public class JWTUtil {
         return jwtParser(token).getExpiration().before(new Date());
     }
 
-//    공통 토큰 생성 메소드
-    public String generateToken(Long userId, String name, String provider, String providerId, Long expiredMs ) {
+//  어세스토큰 생성 메소드
+    public String generateAccessToken(Long userId, String name, String provider, String providerId ) {
         return Jwts.builder()
                 .claim("userId", userId)
                 .claim("name", name)
                 .claim("provider", provider)
                 .claim("providerId", providerId)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiredMs))
+                .expiration(new Date(System.currentTimeMillis() + accessTokenValidity))
+                .signWith(secretKey)
+                .compact();
+    }
+//  리프레쉬토큰 생성 메소드
+    public String generateRefreshToken(Long userId, String name, String provider, String providerId ) {
+        return Jwts.builder()
+                .claim("userId", userId)
+                .claim("name", name)
+                .claim("provider", provider)
+                .claim("providerId", providerId)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + refreshTokenValidity))
                 .signWith(secretKey)
                 .compact();
     }
