@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -36,26 +38,39 @@ public class OnboardingService {
     public void onboardUser(Long userId, OnboardingRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ApiResponseCode.NOT_FOUND));
+        onboardingRepository.save(createOnboarding(user, request));
 
-        Onboarding onboarding = Onboarding.builder()
+        Map<String, String> tokens = generateTokens(user);
+        HttpHeaders headers = createHeadersWithCookies(tokens);
+
+//        리프레쉬 토큰 저장
+        tokenService.saveOrUpdateToken(user.getId(), tokens.get("refreshToken"));
+    }
+
+    private Onboarding createOnboarding(User user, OnboardingRequest request) {
+        return Onboarding.builder()
                 .user(user)
                 .nickname(request.getNickname())
                 .age(request.getAge())
                 .job(request.getJob())
                 .build();
-        onboardingRepository.save(onboarding);
+    }
 
-//        토큰 생성 및 쿠키 설정
-        String accessToken = jwtUtil.generateToken(user.getId(), user.getName(), user.getProvider(), user.getProviderId(),3600000L); //1시간
-        String refreshToken = jwtUtil.generateToken(user.getId(), user.getName(), user.getProvider(), user.getProviderId(),1209600000L); //14일
+    private Map<String, String> generateTokens(User user) {
+        String accessToken = jwtUtil.generateToken(user.getId(), user.getName(), user.getProvider(), user.getProviderId(), 3600000L); // 1시간
+        String refreshToken = jwtUtil.generateToken(user.getId(), user.getName(), user.getProvider(), user.getProviderId(), 1209600000L); // 14일
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("accessToken", accessToken);
+        tokens.put("refreshToken", refreshToken);
+        return tokens;
+    }
 
+    private HttpHeaders createHeadersWithCookies(Map<String, String> tokens) {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Set-Cookie", generateCookie.generateCookieString("Access-Token", accessToken));
-        headers.add("Set-Cookie", generateCookie.generateCookieString("Refresh-Token", refreshToken));
+        headers.add("Set-Cookie", generateCookie.generateCookieString("Access-Token", tokens.get("accessToken")));
+        headers.add("Set-Cookie", generateCookie.generateCookieString("Refresh-Token", tokens.get("refreshToken")));
         headers.setLocation(URI.create("http://localhost:5173"));
-
-//        리프레쉬 토큰 저장
-        tokenService.saveOrUpdateToken(user.getId(), refreshToken);
+        return headers;
     }
 
 //    정적 팩토리 메소드는 객체 생성 시 사용하면 좋음(객체지향적)
