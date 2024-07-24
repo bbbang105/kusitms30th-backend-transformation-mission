@@ -4,6 +4,7 @@ import kusitms.backend.domain.auth.jwt.JWTUtil;
 import kusitms.backend.domain.token.dto.response.TokenResponse;
 import kusitms.backend.domain.token.entity.RefreshToken;
 import kusitms.backend.domain.token.repository.RefreshTokenRepository;
+import kusitms.backend.global.common.ApiResponseCode;
 import kusitms.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,16 +32,16 @@ public class TokenService {
     @Transactional
     public TokenResponse refreshAccessToken(String refreshToken) {
         if (!refreshTokenRepository.existsByToken(refreshToken)) {
-            throw new CustomException(HttpStatus.BAD_REQUEST, "Invalid refresh token");
+            throw new CustomException(ApiResponseCode.UNAUTHORIZED);
         }
         if (jwtUtil.isExpired(refreshToken)) {
-            throw new CustomException(HttpStatus.BAD_REQUEST, "Expired refresh token");
+            throw new CustomException(ApiResponseCode.UNAUTHORIZED);
         }
 
         Long userId = jwtUtil.getUserId(refreshToken);
         RefreshToken storedRefreshToken = refreshTokenRepository.findByUserId(userId);
         if (storedRefreshToken == null || !storedRefreshToken.getToken().equals(refreshToken)) {
-            throw new CustomException(HttpStatus.BAD_REQUEST, "Invalid refresh token");
+            throw new CustomException(ApiResponseCode.UNAUTHORIZED);
         }
 
         return getTokenResponseByRefreshToken(refreshToken);

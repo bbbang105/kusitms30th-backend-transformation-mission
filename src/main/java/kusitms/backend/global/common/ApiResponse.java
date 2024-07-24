@@ -1,6 +1,5 @@
 package kusitms.backend.global.common;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -13,22 +12,22 @@ public class ApiResponse<T> {
     private final String message;
     private final T data;
 
-    public static <T> ApiResponse<T> of(SuccessCode successCode, T data){
+    public static <T> ApiResponse<T> of(ApiResponseCode apiResponseCode, T data){
         return ApiResponse.<T>builder()
-                .status(successCode.getHttpStatus().value())
-                .message(successCode.getMessage())
+                .status(apiResponseCode.getHttpStatus().value())
+                .message(apiResponseCode.getMessage())
                 .data(data)
                 .build();
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> ok(T data){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.of(SuccessCode.OK, data));
+                .body(ApiResponse.of(ApiResponseCode.OK, data));
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> created(T data){
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.of(SuccessCode.CREATED, data));
+                .body(ApiResponse.of(ApiResponseCode.CREATED, data));
     }
 
 

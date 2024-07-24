@@ -10,6 +10,7 @@ import kusitms.backend.domain.onboarding.repository.OnboardingRepository;
 import kusitms.backend.domain.token.service.TokenService;
 import kusitms.backend.domain.user.entity.User;
 import kusitms.backend.domain.user.repository.UserRepository;
+import kusitms.backend.global.common.ApiResponseCode;
 import kusitms.backend.global.common.GenerateCookie;
 import kusitms.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class OnboardingService {
     @Transactional
     public void onboardUser(Long userId, OnboardingRequest request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND,"User not found"));
+                .orElseThrow(() -> new CustomException(ApiResponseCode.NOT_FOUND));
 
         Onboarding onboarding = Onboarding.builder()
                 .user(user)
@@ -63,7 +64,7 @@ public class OnboardingService {
     public OnboardingInfoResponse getOnboardingInfo(Long userId) {
         checkMatchingTokenAndUserId(userId);
         Onboarding onboarding = onboardingRepository.findByUserId(userId)
-                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Onboarding not found"));
+                .orElseThrow(() -> new CustomException(ApiResponseCode.NOT_FOUND));
         return OnboardingInfoResponse.from(onboarding);
     }
 
@@ -71,7 +72,7 @@ public class OnboardingService {
     public void modifyOnboardingInfo(Long userId, ModifyOnboardingInfoRequest request) {
         checkMatchingTokenAndUserId(userId);
         Onboarding onboarding = onboardingRepository.findByUserId(userId)
-                .orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND,"Onboarding not found"));
+                .orElseThrow(()->new CustomException(ApiResponseCode.NOT_FOUND));
         onboarding.modifyOnboarding(request);
     }
 
@@ -79,14 +80,14 @@ public class OnboardingService {
     public void checkMatchingTokenAndUserId(Long userId) {
         String authorizationHeader = httpServletRequest.getHeader("Authorization");
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            throw new CustomException(HttpStatus.UNAUTHORIZED, "Unauthorized Token");
+            throw new CustomException(ApiResponseCode.UNAUTHORIZED);
         }
 
         String token = authorizationHeader.substring(7);
         Long authenticatedUserId =jwtUtil.getUserId(token);
 
         if (!authenticatedUserId.equals(userId)) {
-            throw new CustomException(HttpStatus.FORBIDDEN, "Access denied: User ID mismatch");
+            throw new CustomException(ApiResponseCode.FORBIDDEN);
         }
     }
 
