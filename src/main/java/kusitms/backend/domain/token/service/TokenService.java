@@ -55,8 +55,8 @@ public class TokenService {
         String provider = jwtUtil.getProvider(refreshToken);
         String providerId = jwtUtil.getProviderId(refreshToken);
 
-        String newAccessToken = jwtUtil.generateAccessToken(userId, name, provider, providerId);
-        String newRefreshToken = jwtUtil.generateRefreshToken(userId, name, provider, providerId);
+        String newAccessToken = jwtUtil.generateAccessToken(userId, name, provider, providerId); //1시간
+        String newRefreshToken = jwtUtil.generateRefreshToken(userId, name, provider, providerId); //14일
 
         this.saveOrUpdateToken(userId, newRefreshToken);
 
