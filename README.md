@@ -29,31 +29,31 @@
 ### 기능 구현 사진 설명 (로그인)
 
 1. 클라이언트 측에서 해당 소셜로그인 버튼을 눌러 해당 소셜로그인 창으로 이동한다. (5173포트로 간단하게 만든 클라이언트 페이지입니다.)
-<img width="550" alt="스크린샷 2024-07-25 오후 3 49 38" src="https://github.com/user-attachments/assets/506b5954-1517-4343-be90-d9b2e3a7a4cd">
-<img width="550" alt="스크린샷 2024-07-25 오후 3 49 55" src="https://github.com/user-attachments/assets/fd4d0490-dc53-4b78-b0da-4f4bec3ca6ee">
+<img width="650" alt="스크린샷 2024-07-25 오후 3 49 38" src="https://github.com/user-attachments/assets/506b5954-1517-4343-be90-d9b2e3a7a4cd">
+<img width="400" alt="스크린샷 2024-07-25 오후 3 49 55" src="https://github.com/user-attachments/assets/fd4d0490-dc53-4b78-b0da-4f4bec3ca6ee">
+<img width="300" alt="스크린샷 2024-07-25 오후 3 55 24" src="https://github.com/user-attachments/assets/d13777fb-ff2d-4990-adad-008dc579b946"><br/>
 
 2. 구글 소셜로그인 진행 <br/>
-   - 처음 로그인을 하여 온보딩을 하지 않은 유저일 경우<br/>
-   http://localhost:5173/onboarding?userId=" + userId 로 이동되고 userId와 request(닉네임, 나이, 직업) 을 이용하여 온보딩을 진행한다 (토큰 아직 발급 x, 데이터베이스에 온보딩을 제외한 기본 user 정보만 들어감)<br/>
-   - 이미 온보딩까지 진행한 유저일 경우<br/>
-   http://localhost:5173으로 바로 이동 (쿠키에 토큰 발급)<br/>
-<img width="450" alt="스크린샷 2024-07-25 오후 3 55 24" src="https://github.com/user-attachments/assets/d13777fb-ff2d-4990-adad-008dc579b946"><br/>
-- 온보딩을 하지 않은 User -<br/>
+- 처음 로그인을 하여 온보딩을 하지 않은 유저일 경우<br/>
+http://localhost:5173/onboarding?userId=" + userId 로 이동되고 userId와 request(닉네임, 나이, 직업) 을 이용하여 온보딩을 진행한다 (토큰 아직 발급 x, users 데이터베이스에 소셜 user 정보만 들어감)<br/>
 <img width="600" alt="스크린샷 2024-07-25 오후 4 04 03" src="https://github.com/user-attachments/assets/313cf6fd-34ac-4fa6-808d-08938a522124"> <br/>
-- 온보딩을 한 User - <br/>
+<img width="600" alt="스크린샷 2024-07-25 오후 4 06 36" src="https://github.com/user-attachments/assets/372c2a69-90a8-4375-b459-225892260f8f"><br/>
+- 이미 온보딩까지 진행한 유저일 경우<br/>
+http://localhost:5173으로 바로 이동 (쿠키에 토큰 발급)<br/>
 <img width="600" alt="스크린샷 2024-07-25 오후 4 14 33" src="https://github.com/user-attachments/assets/8f195a1f-c32a-4a28-80dd-83ce6caea5ec"><br/>
-<img width="600" alt="스크린샷 2024-07-25 오후 4 06 36" src="https://github.com/user-attachments/assets/372c2a69-90a8-4375-b459-225892260f8f">
+<img width="600" alt="스크린샷 2024-07-25 오후 6 01 31" src="https://github.com/user-attachments/assets/ff9b479e-4823-4a83-b54b-340a4803fcf8">
+
 
 ---
 
 ### 기능 구현 사진 설명 (온보딩)
 
 1. 포스트맨에서 userId와 request를 이용하여 온보딩을 진행합니다.
-<img width="1079" alt="스크린샷 2024-07-25 오후 4 10 44" src="https://github.com/user-attachments/assets/6fdbc9b1-99b2-46e9-bd48-d01ddf6be9ab">
+<img width="1088" alt="스크린샷 2024-07-25 오후 5 53 16" src="https://github.com/user-attachments/assets/f47c6c6f-f5f9-4fe2-b184-47c0239b04a6">
 
-2. 데이터베이스에서 온보딩 정보와, 발급된 리프레쉬 토큰을 확인할 수 있습니다. 
+
+2. 데이터베이스에서 저장된 온보딩 정보를 확인할 수 있습니다. 
 <img width="733" alt="스크린샷 2024-07-25 오후 4 11 59" src="https://github.com/user-attachments/assets/d3894957-dc0a-4051-891f-925269741e00">
-<img width="639" alt="스크린샷 2024-07-25 오후 4 12 24" src="https://github.com/user-attachments/assets/2d680b17-7ce2-4181-9f06-c2a3ca76a789">
 
 ### 기능 구현 사진 설명 (마이페이지)
 
