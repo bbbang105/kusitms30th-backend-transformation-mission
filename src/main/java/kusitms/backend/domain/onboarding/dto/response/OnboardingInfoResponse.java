@@ -3,7 +3,6 @@ package kusitms.backend.domain.onboarding.dto.response;
 import kusitms.backend.domain.onboarding.entity.Onboarding;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor

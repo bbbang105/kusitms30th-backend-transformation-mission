@@ -7,7 +7,6 @@ import kusitms.backend.domain.token.repository.RefreshTokenRepository;
 import kusitms.backend.global.common.ApiResponseCode;
 import kusitms.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

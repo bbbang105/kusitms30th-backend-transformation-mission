@@ -15,15 +15,10 @@ import kusitms.backend.global.common.ApiResponseCode;
 import kusitms.backend.global.common.GenerateCookie;
 import kusitms.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
