@@ -1,6 +1,7 @@
 package kusitms.backend.domain.onboarding.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import kusitms.backend.domain.auth.jwt.JWTUtil;
 import kusitms.backend.domain.onboarding.dto.request.ModifyOnboardingInfoRequest;
 import kusitms.backend.domain.onboarding.dto.request.OnboardingRequest;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,16 +37,15 @@ public class OnboardingService {
     private final HttpServletRequest httpServletRequest;
 
     @Transactional
-    public void onboardUser(Long userId, OnboardingRequest request) {
+    public void onboardUser(Long userId, OnboardingRequest request, HttpServletResponse response) throws IOException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ApiResponseCode.NOT_FOUND));
+
+        // 온보딩 정보 저장
         onboardingRepository.save(createOnboarding(user, request));
 
-        Map<String, String> tokens = generateTokens(user);
-        HttpHeaders headers = createHeadersWithCookies(tokens);
-
-//        리프레쉬 토큰 저장
-        tokenService.saveOrUpdateToken(user.getId(), tokens.get("refreshToken"));
+        // 온보딩 성공 후 로그인 화면으로 리디렉션
+        response.sendRedirect("http://localhost:5173/login");
     }
 
     private Onboarding createOnboarding(User user, OnboardingRequest request) {

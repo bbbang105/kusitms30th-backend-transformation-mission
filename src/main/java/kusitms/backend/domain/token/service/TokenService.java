@@ -22,6 +22,7 @@ public class TokenService {
     public void saveOrUpdateToken(Long userId, String token) {
         RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId);
         if (refreshToken == null) {
+
             refreshToken = new RefreshToken(userId, token);
             refreshTokenRepository.save(refreshToken);
         } else {

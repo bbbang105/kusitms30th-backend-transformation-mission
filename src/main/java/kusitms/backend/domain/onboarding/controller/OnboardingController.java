@@ -2,6 +2,7 @@ package kusitms.backend.domain.onboarding.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import kusitms.backend.domain.onboarding.dto.request.ModifyOnboardingInfoRequest;
 import kusitms.backend.domain.onboarding.dto.request.OnboardingRequest;
@@ -11,6 +12,8 @@ import kusitms.backend.global.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,8 +29,8 @@ public class OnboardingController {
             
             """)
     @PostMapping("/users/{userId}/onboarding")
-    public ResponseEntity<ApiResponse<Void>> onboardUser(@PathVariable Long userId, @Valid @RequestBody OnboardingRequest request) {
-        onboardingService.onboardUser(userId, request);
+    public ResponseEntity<ApiResponse<Void>> onboardUser(@PathVariable Long userId, @Valid @RequestBody OnboardingRequest request, HttpServletResponse response) throws IOException {
+        onboardingService.onboardUser(userId, request,response);
         return ApiResponse.created(null);
     }
 
