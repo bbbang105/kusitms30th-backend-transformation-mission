@@ -53,7 +53,7 @@ public class SecurityConfig {
                                 .userService(customOAuth2UserService)))
                         .successHandler(customSuccessHandler))
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/","/login","/users/{userId}/onboarding","/token/refresh").permitAll()
+                        .requestMatchers("/","/login","/login/google","/login/naver","/login/kakao","/users/{userId}/onboarding","/token/refresh").permitAll()
                         .requestMatchers("/swagger-ui.html", "/v3/api-docs", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // Swagger 관련 엔드포인트 허용
                         .anyRequest().authenticated())
                 .sessionManagement((session) -> session

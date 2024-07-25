@@ -8,7 +8,7 @@ public class GoogleResponse implements OAuth2Response{
 
     //    구글 반환 객체
 //    {
-//        resultcode=00, message=success, id=123123123, name=~~~~
+//        resultcode=00, message=success, sub=123123123, name=~~~~
 //    }
 
     private final Map<String, Object> attribute;
@@ -17,11 +17,9 @@ public class GoogleResponse implements OAuth2Response{
         this.attribute = attribute;
     }
 
-
     @Override
     public String getProvider() {
         return Provider.GOOGLE.getProviderName();
-
     }
 
     @Override

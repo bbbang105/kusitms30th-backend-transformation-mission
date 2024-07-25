@@ -31,6 +31,7 @@ public class OnboardingController {
         return ApiResponse.created(null);
     }
 
+
     @Operation(summary = "온보딩 정보 조회", description = """
             
             userId를 통하여 해당 회원 온보딩 정보인 닉네임, 나이, 직업을 조회한다.
