@@ -57,23 +57,6 @@ public class OnboardingService {
                 .build();
     }
 
-    private Map<String, String> generateTokens(User user) {
-        String accessToken = jwtUtil.generateAccessToken(user.getId(), user.getName(), user.getProvider(), user.getProviderId());
-        String refreshToken = jwtUtil.generateRefreshToken(user.getId(), user.getName(), user.getProvider(), user.getProviderId());
-        Map<String, String> tokens = new HashMap<>();
-        tokens.put("accessToken", accessToken);
-        tokens.put("refreshToken", refreshToken);
-        return tokens;
-    }
-
-    private HttpHeaders createHeadersWithCookies(Map<String, String> tokens) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Set-Cookie", generateCookie.generateCookieString("Access-Token", tokens.get("accessToken")));
-        headers.add("Set-Cookie", generateCookie.generateCookieString("Refresh-Token", tokens.get("refreshToken")));
-        headers.setLocation(URI.create("http://localhost:5173"));
-        return headers;
-    }
-
 //    정적 팩토리 메소드는 객체 생성 시 사용하면 좋음(객체지향적)
 //    단, 아래 마이페이지 수정과 같이 수정에서는 보통 사용하지 않음(인스턴스 메소드 사용)
     @Transactional(readOnly = true)
