@@ -2,7 +2,6 @@ package kusitms.backend.domain.token.dto.response;
 
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter

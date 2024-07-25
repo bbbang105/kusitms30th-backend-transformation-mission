@@ -1,6 +1,7 @@
 package kusitms.backend.domain.onboarding.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import kusitms.backend.domain.auth.jwt.JWTUtil;
 import kusitms.backend.domain.onboarding.dto.request.ModifyOnboardingInfoRequest;
 import kusitms.backend.domain.onboarding.dto.request.OnboardingRequest;
@@ -14,14 +15,10 @@ import kusitms.backend.global.common.ApiResponseCode;
 import kusitms.backend.global.common.GenerateCookie;
 import kusitms.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -35,16 +32,15 @@ public class OnboardingService {
     private final HttpServletRequest httpServletRequest;
 
     @Transactional
-    public void onboardUser(Long userId, OnboardingRequest request) {
+    public void onboardUser(Long userId, OnboardingRequest request, HttpServletResponse response) throws IOException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ApiResponseCode.NOT_FOUND));
+
+        // 온보딩 정보 저장
         onboardingRepository.save(createOnboarding(user, request));
 
-        Map<String, String> tokens = generateTokens(user);
-        HttpHeaders headers = createHeadersWithCookies(tokens);
-
-//        리프레쉬 토큰 저장
-        tokenService.saveOrUpdateToken(user.getId(), tokens.get("refreshToken"));
+        // 온보딩 성공 후 로그인 화면으로 리디렉션
+        response.sendRedirect("http://localhost:5173/login");
     }
 
     private Onboarding createOnboarding(User user, OnboardingRequest request) {
@@ -54,23 +50,6 @@ public class OnboardingService {
                 .age(request.getAge())
                 .job(request.getJob())
                 .build();
-    }
-
-    private Map<String, String> generateTokens(User user) {
-        String accessToken = jwtUtil.generateAccessToken(user.getId(), user.getName(), user.getProvider(), user.getProviderId());
-        String refreshToken = jwtUtil.generateRefreshToken(user.getId(), user.getName(), user.getProvider(), user.getProviderId());
-        Map<String, String> tokens = new HashMap<>();
-        tokens.put("accessToken", accessToken);
-        tokens.put("refreshToken", refreshToken);
-        return tokens;
-    }
-
-    private HttpHeaders createHeadersWithCookies(Map<String, String> tokens) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Set-Cookie", generateCookie.generateCookieString("Access-Token", tokens.get("accessToken")));
-        headers.add("Set-Cookie", generateCookie.generateCookieString("Refresh-Token", tokens.get("refreshToken")));
-        headers.setLocation(URI.create("http://localhost:5173"));
-        return headers;
     }
 
 //    정적 팩토리 메소드는 객체 생성 시 사용하면 좋음(객체지향적)
