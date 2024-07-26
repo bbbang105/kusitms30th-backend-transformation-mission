@@ -22,7 +22,7 @@ public class OnboardingController {
     private final OnboardingService onboardingService;
 
     @Operation(summary = "온보딩 정보 추가 입력", description = """
-            
+           
             userId와 추가정보인 OnboardingRequest를 이용하여 온보딩 추가정보를 입력한다.
             
             쿠키, 헤더 토큰 인증 필요없습니다.
@@ -48,7 +48,7 @@ public class OnboardingController {
         return ApiResponse.ok(onboardingInfoResponse);
     }
 
-    @Operation(summary = "온보딩 정보 조회", description = """
+    @Operation(summary = "온보딩 정보 수정", description = """
             
             userId와 ModifyOnboardingInfoRequest를 통하여 해당 회원 온보딩 정보인 닉네임, 나이, 직업을 수정합니다.
             

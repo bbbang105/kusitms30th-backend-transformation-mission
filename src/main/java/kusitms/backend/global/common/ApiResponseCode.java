@@ -15,7 +15,7 @@ public enum ApiResponseCode {
     /**
      * 201 CREATED
      */
-    CREATED(HttpStatus.CREATED,"요청이 성공했습니다."),
+    CREATED(HttpStatus.CREATED,"리소스 생성이 완료되었습니다."),
 
     /**
      * 400 BAD REQUEST

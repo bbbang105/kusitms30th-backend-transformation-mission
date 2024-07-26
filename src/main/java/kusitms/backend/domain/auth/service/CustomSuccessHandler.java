@@ -47,11 +47,11 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             String accessToken = jwtUtil.generateAccessToken(userId, name, provider, providerId);
             String refreshToken = jwtUtil.generateRefreshToken(userId, name, provider, providerId);
 
-            response.addCookie(generateCookie.generateCookieObject("Access-Token", accessToken));
-            response.addCookie(generateCookie.generateCookieObject("Refresh-Token", refreshToken));
-
             // 리프레쉬 토큰 저장
             tokenService.saveOrUpdateToken(userId, refreshToken);
+
+            response.addCookie(generateCookie.generateCookieObject("Access-Token", accessToken));
+            response.addCookie(generateCookie.generateCookieObject("Refresh-Token", refreshToken));
 
             response.sendRedirect("http://localhost:5173");
         }

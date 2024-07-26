@@ -27,8 +27,6 @@ public class OnboardingService {
     private final UserRepository userRepository;
     private final OnboardingRepository onboardingRepository;
     private final JWTUtil jwtUtil;
-    private final TokenService tokenService;
-    private final GenerateCookie generateCookie;
     private final HttpServletRequest httpServletRequest;
 
     @Transactional
